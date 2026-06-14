@@ -1,0 +1,178 @@
+<!doctype html><html lang=fr dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-tutorial-basics/NeuroScaling  - Fondements Scientifiques" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>NEURO-SCALE : Fondements Scientifiques (Couche 1) | NeuroScaling</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://francklambinet-del.github.io/NeuroScaling/img/docusaurus-social-card.jpg /><meta data-rh=true name=twitter:image content=https://francklambinet-del.github.io/NeuroScaling/img/docusaurus-social-card.jpg /><meta data-rh=true property=og:url content="https://francklambinet-del.github.io/NeuroScaling/tutorial-basics/NeuroScaling  - Fondements Scientifiques"/><meta data-rh=true property=og:locale content=fr /><meta data-rh=true name=docusaurus_locale content=fr /><meta data-rh=true name=docsearch:language content=fr /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-default-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-current /><meta data-rh=true property=og:title content="NEURO-SCALE : Fondements Scientifiques (Couche 1) | NeuroScaling"/><meta data-rh=true name=description content="Documentation Didactique Auteur : Franck Lambinet · Mars 2026"/><meta data-rh=true property=og:description content="Documentation Didactique Auteur : Franck Lambinet · Mars 2026"/><link data-rh=true rel=icon href=/NeuroScaling/img/logo-neuroscaling_icon.ico /><link data-rh=true rel=canonical href="https://francklambinet-del.github.io/NeuroScaling/tutorial-basics/NeuroScaling  - Fondements Scientifiques"/><link data-rh=true rel=alternate href="https://francklambinet-del.github.io/NeuroScaling/tutorial-basics/NeuroScaling  - Fondements Scientifiques" hreflang=fr /><link data-rh=true rel=alternate href="https://francklambinet-del.github.io/NeuroScaling/tutorial-basics/NeuroScaling  - Fondements Scientifiques" hreflang=x-default /><link rel=alternate type=application/rss+xml href=/NeuroScaling/blog/rss.xml title="NeuroScaling RSS Feed"><link rel=alternate type=application/atom+xml href=/NeuroScaling/blog/atom.xml title="NeuroScaling Atom Feed"><link rel=stylesheet href=/NeuroScaling/assets/css/styles.bd6e70c1.css /><script src=/NeuroScaling/assets/js/runtime~main.2c1fbb0b.js defer></script><script src=/NeuroScaling/assets/js/main.39ecadb7.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-3fd")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||"dark"),document.documentElement.setAttribute("data-theme-choice",t||"dark")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><link rel=preload as=image href=/NeuroScaling/img/logo.svg /><div role=region aria-label="Aller au contenu principal"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Aller au contenu principal</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Ouvrir/fermer la barre de navigation" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/NeuroScaling/><div class=navbar__logo><img src=/NeuroScaling/img/logo.svg alt="NeuroScaling Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/NeuroScaling/img/logo.svg alt="NeuroScaling Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">NeuroScaling</b></a><a class="navbar__item navbar__link" href=/NeuroScaling/>Framework</a><a class="navbar__item navbar__link" href=/NeuroScaling/blog>Blog</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href=https://github.com/facebook/docusaurus target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type=button disabled title="system mode" aria-label="Basculer entre le mode sombre et clair (actuellement system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Retour au début de la page" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">Sur cette page</button></div><div class="theme-doc-markdown markdown"><header><h1>NEURO-SCALE : Fondements Scientifiques (Couche 1)</h1></header>
+<p><strong>Documentation Didactique</strong> <strong>Auteur :</strong> Franck Lambinet · Mars 2026</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=introduction--pourquoi-une-couche-scientifique->Introduction — Pourquoi une Couche Scientifique ?<a href=#introduction--pourquoi-une-couche-scientifique- class=hash-link aria-label="Lien direct vers Introduction — Pourquoi une Couche Scientifique ?" title="Lien direct vers Introduction — Pourquoi une Couche Scientifique ?" translate=no>​</a></h2>
+<p>NEURO-SCALE repose sur une conviction fondamentale : les décisions d'architecture ne peuvent pas être arbitraires. Chaque agent, chaque seuil, chaque règle <strong>HITL</strong> (Human In The Loop) doit pouvoir être justifié par une théorie scientifique robuste. La <strong>Couche 1</strong> constitue le socle de légitimité du framework, répondant à la question : <em>"Sur quoi vous basez-vous ?"</em>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=objectif-de-ce-document>Objectif de ce document<a href=#objectif-de-ce-document class=hash-link aria-label="Lien direct vers Objectif de ce document" title="Lien direct vers Objectif de ce document" translate=no>​</a></h3>
+<p>Maîtriser les 12 fondements scientifiques de NEURO-SCALE pour défendre chaque choix de conception devant un RTE, un DSI, ou un auditeur académique.</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=niveaux-de-certitude-scientifique>Niveaux de Certitude Scientifique<a href=#niveaux-de-certitude-scientifique class=hash-link aria-label="Lien direct vers Niveaux de Certitude Scientifique" title="Lien direct vers Niveaux de Certitude Scientifique" translate=no>​</a></h2>
+<p>Le niveau de certitude ne détermine pas l'importance dans le framework, mais le niveau d'autonomie accordé aux agents qui s'en inspirent.</p>
+<ul>
+<li class="">
+<p>🟢 <strong>IRRÉFUTABLE</strong> — Consensus scientifique.</p>
+</li>
+<li class="">
+<p>🟡 <strong>ROBUSTE</strong> — Études sérieuses, quelques nuances.</p>
+</li>
+<li class="">
+<p>🔴 <strong>EXPÉRIMENTAL</strong> — Prometteur, non consolidé.</p>
+</li>
+</ul>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=1-théorie-de-la-charge-cognitive-clt--sweller-1988>1. Théorie de la Charge Cognitive (CLT) — Sweller (1988)<a href=#1-théorie-de-la-charge-cognitive-clt--sweller-1988 class=hash-link aria-label="Lien direct vers 1. Théorie de la Charge Cognitive (CLT) — Sweller (1988)" title="Lien direct vers 1. Théorie de la Charge Cognitive (CLT) — Sweller (1988)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟢</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=la-théorie>La théorie<a href=#la-théorie class=hash-link aria-label="Lien direct vers La théorie" title="Lien direct vers La théorie" translate=no>​</a></h3>
+<p>La performance d'apprentissage et de traitement de l'information est gouvernée par la quantité de charge mentale imposée.</p>
+<table><thead><tr><th><strong>Type de charge</strong><th><strong>Définition</strong><th><strong>Action NEURO-SCALE</strong><th><strong>Agent</strong><tbody><tr><td><strong>Intrinsèque</strong><td>Complexité de la tâche elle-même<td>Mesure comme baseline<td><strong>CLI Engine</strong><tr><td><strong>Extrinsèque</strong><td>Friction générée par les processus et outils<td>Déporte sur les agents (coordination, etc.)<td>Tous les agents<tr><td><strong>Germane</strong><td>Effort productif (création de valeur)<td>Protège et maximise<td><strong>CapacityAgent</strong></table>
+<blockquote>
+<p><strong>Règle :</strong> Intrinsèque + Extrinsèque + Germane ≤ 100% capacité. Si l'extrinsèque augmente, la performance chute.</p>
+</blockquote>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=zone-de-flow>Zone de Flow<a href=#zone-de-flow class=hash-link aria-label="Lien direct vers Zone de Flow" title="Lien direct vers Zone de Flow" translate=no>​</a></h3>
+<ul>
+<li class="">
+<p><strong>40–65% :</strong> Zone optimale (Flow, neuroplasticité, dopamine).</p>
+</li>
+<li class="">
+<p><strong>> 75% :</strong> Surcharge, erreurs critiques, burnout.</p>
+</li>
+</ul>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=2-modèle-de-mémoire-de-travail--baddeley--hitch-1974>2. Modèle de Mémoire de Travail — Baddeley & Hitch (1974)<a href=#2-modèle-de-mémoire-de-travail--baddeley--hitch-1974 class=hash-link aria-label="Lien direct vers 2. Modèle de Mémoire de Travail — Baddeley & Hitch (1974)" title="Lien direct vers 2. Modèle de Mémoire de Travail — Baddeley & Hitch (1974)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟢</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=la-théorie-1>La théorie<a href=#la-théorie-1 class=hash-link aria-label="Lien direct vers La théorie" title="Lien direct vers La théorie" translate=no>​</a></h3>
+<p>La mémoire de travail est composée de 4 composantes spécialisées traitant l'information en parallèle (Administrateur Central, Boucle Phonologique, Calepin Visuospatial, Buffer Épisodique).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=pont-neuro-scale>Pont NEURO-SCALE<a href=#pont-neuro-scale class=hash-link aria-label="Lien direct vers Pont NEURO-SCALE" title="Lien direct vers Pont NEURO-SCALE" translate=no>​</a></h3>
+<p>Externaliser l'information libère les ressources pour l'<strong>Administrateur Central</strong> (décisions stratégiques).</p>
+<ul>
+<li class="">
+<p><strong>Dashboard :</strong> Libère le Calepin Visuospatial.</p>
+</li>
+<li class="">
+<p><strong>Agent Pulse :</strong> Libère la Boucle Phonologique (5 lignes, 90 secondes).</p>
+</li>
+</ul>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=3-dual-process-theory--kahneman--tversky-19742011>3. Dual Process Theory — Kahneman & Tversky (1974–2011)<a href=#3-dual-process-theory--kahneman--tversky-19742011 class=hash-link aria-label="Lien direct vers 3. Dual Process Theory — Kahneman & Tversky (1974–2011)" title="Lien direct vers 3. Dual Process Theory — Kahneman & Tversky (1974–2011)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟢</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=la-théorie-2>La théorie<a href=#la-théorie-2 class=hash-link aria-label="Lien direct vers La théorie" title="Lien direct vers La théorie" translate=no>​</a></h3>
+<p>Le cerveau utilise deux systèmes :</p>
+<ul>
+<li class="">
+<p><strong>Système 1 :</strong> Rapide, intuitif, peu coûteux mais sujet aux biais.</p>
+</li>
+<li class="">
+<p><strong>Système 2 :</strong> Lent, logique, très coûteux, s'épuise vite.</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=pont-neuro-scale-1>Pont NEURO-SCALE<a href=#pont-neuro-scale-1 class=hash-link aria-label="Lien direct vers Pont NEURO-SCALE" title="Lien direct vers Pont NEURO-SCALE" translate=no>​</a></h3>
+<p>Le <strong>Thalamus</strong> présente une seule recommandation principale (<strong>RPD</strong>) pour éviter de forcer le Système 2 épuisé à comparer des options. Le <strong>WeakSignalDetector</strong> détecte les biais du Système 1 (ex: "ça me semble OK") et suggère un HITL.</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=4-loi-de-la-variété-requise--ashby-1956>4. Loi de la Variété Requise — Ashby (1956)<a href=#4-loi-de-la-variété-requise--ashby-1956 class=hash-link aria-label="Lien direct vers 4. Loi de la Variété Requise — Ashby (1956)" title="Lien direct vers 4. Loi de la Variété Requise — Ashby (1956)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟢</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=la-théorie-3>La théorie<a href=#la-théorie-3 class=hash-link aria-label="Lien direct vers La théorie" title="Lien direct vers La théorie" translate=no>​</a></h3>
+<p><em>"Only variety can absorb variety"</em>. Un système de contrôle doit posséder autant d'états possibles que le système qu'il cherche à réguler.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=justification-des-agents>Justification des agents<a href=#justification-des-agents class=hash-link aria-label="Lien direct vers Justification des agents" title="Lien direct vers Justification des agents" translate=no>​</a></h3>
+<ul>
+<li class="">
+<p><strong>ART de 150 personnes :</strong> ~500 événements/sprint.</p>
+</li>
+<li class="">
+<p><strong>Capacité RTE humain :</strong> ~5 éléments.</p>
+</li>
+<li class="">
+<p><strong>Déficit :</strong> x100.</p>
+</li>
+</ul>
+<p>Les agents sont une nécessité mathématique pour couvrir la complexité.</p>
+<ul>
+<li class=""><strong>Indicateur :</strong> <strong>CCR</strong> (Complexity Coverage Ratio) dans le <strong>CLI Engine</strong>.</li>
+</ul>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=5-high-reliability-organizations-hro--weick--sutcliffe-1999>5. High Reliability Organizations (HRO) — Weick & Sutcliffe (1999)<a href=#5-high-reliability-organizations-hro--weick--sutcliffe-1999 class=hash-link aria-label="Lien direct vers 5. High Reliability Organizations (HRO) — Weick & Sutcliffe (1999)" title="Lien direct vers 5. High Reliability Organizations (HRO) — Weick & Sutcliffe (1999)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟢</p>
+<p>NEURO-SCALE intègre les 5 principes des organisations à quasi-zéro défaillance:</p>
+<ol>
+<li class="">
+<p><strong>Préoccupation par l'échec :</strong> Traitée par le <strong>WeakSignalDetector</strong>.</p>
+</li>
+<li class="">
+<p><strong>Réticence à simplifier :</strong> Un problème complexe n'est jamais forcé en simple (<strong>Thalamus</strong>).</p>
+</li>
+<li class="">
+<p><strong>Sensibilité aux opérations :</strong> Mesure de l'état réel par le <strong>Nocicepteur</strong>.</p>
+</li>
+<li class="">
+<p><strong>Engagement vers la résilience :</strong> Reprise de contrôle par <strong>HITL</strong> sans perte de contexte.</p>
+</li>
+<li class="">
+<p><strong>Déférence à l'expertise :</strong> Routage vers le bon rôle par le <strong>Thalamus</strong>.</p>
+</li>
+</ol>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=6-psychological-safety--edmondson-1999>6. Psychological Safety — Edmondson (1999)<a href=#6-psychological-safety--edmondson-1999 class=hash-link aria-label="Lien direct vers 6. Psychological Safety — Edmondson (1999)" title="Lien direct vers 6. Psychological Safety — Edmondson (1999)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟢</p>
+<p>C'est une <strong>contrainte d'architecture (ADR-004)</strong>.</p>
+<ul>
+<li class="">
+<p>Tous les scores sont <strong>AGRÉGÉS à l'équipe</strong>.</p>
+</li>
+<li class="">
+<p><strong>AUCUN score individuel</strong> n'est exposé, jamais.</p>
+</li>
+<li class="">
+<p>Objectif : Éviter les comportements défensifs et la détérioration des données.</p>
+</li>
+</ul>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=7-flow--csikszentmihalyi-1990>7. Flow — Csikszentmihalyi (1990)<a href=#7-flow--csikszentmihalyi-1990 class=hash-link aria-label="Lien direct vers 7. Flow — Csikszentmihalyi (1990)" title="Lien direct vers 7. Flow — Csikszentmihalyi (1990)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟢</p>
+<p>Le <strong>CapacityAgent</strong> agit comme gardien du Flow en maintenant la charge cognitive entre <strong>40% et 65%</strong>.</p>
+<ul>
+<li class="">
+<p>Si CLI > 75% sur 2 sprints → Alerte réduction WIP.</p>
+</li>
+<li class="">
+<p>Si CLI &lt; 40% sur 1 sprint → Signal de sous-engagement.</p>
+</li>
+</ul>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=8-cadre-cynefin--snowden-2007>8. Cadre Cynefin — Snowden (2007)<a href=#8-cadre-cynefin--snowden-2007 class=hash-link aria-label="Lien direct vers 8. Cadre Cynefin — Snowden (2007)" title="Lien direct vers 8. Cadre Cynefin — Snowden (2007)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟡</p>
+<p>Utilisé par le <strong>Thalamus Engine</strong> pour déterminer le niveau d'autonomie des agents:</p>
+<table><thead><tr><th><strong>Domaine</strong><th><strong>Caractéristique</strong><th><strong>Autonomie Agent</strong><th><strong>HITL</strong><tbody><tr><td><strong>Simple</strong><td>Bonnes pratiques<td>Niveau 2-3 (Semi-autonome)<td>Optionnel<tr><td><strong>Compliqué</strong><td>Expertise requise<td>Niveau 1 (Suggestif)<td>Recommandé<tr><td><strong>Complexe</strong><td>Émergent<td>Niveau 0 (Shadow IA)<td>Obligatoire<tr><td><strong>Chaotique</strong><td>Crise<td>Niveau 0<td>Immédiat P0</table>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=9-double-loop-learning--argyris--schön-1978>9. Double Loop Learning — Argyris & Schön (1978)<a href=#9-double-loop-learning--argyris--schön-1978 class=hash-link aria-label="Lien direct vers 9. Double Loop Learning — Argyris & Schön (1978)" title="Lien direct vers 9. Double Loop Learning — Argyris & Schön (1978)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟢</p>
+<p>L'<strong>ADR-011</strong> impose la classification des recommandations en trois niveaux:</p>
+<ul>
+<li class="">
+<p><strong>[SL] Single Loop :</strong> Corriger dans le cadre existant (ajustement du plan).</p>
+</li>
+<li class="">
+<p><strong>[DL] Double Loop :</strong> Remettre en question la règle ou le modèle mental.</p>
+</li>
+<li class="">
+<p><strong>[DT] Deutero-Learning :</strong> Apprendre à apprendre (amélioration du processus d'apprentissage).</p>
+</li>
+</ul>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=10-complex-adaptive-systems-cas--holland-1992>10. Complex Adaptive Systems (CAS) — Holland (1992)<a href=#10-complex-adaptive-systems-cas--holland-1992 class=hash-link aria-label="Lien direct vers 10. Complex Adaptive Systems (CAS) — Holland (1992)" title="Lien direct vers 10. Complex Adaptive Systems (CAS) — Holland (1992)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟡</p>
+<p><strong>Principe ADR-012 :</strong> Les agents sont des capteurs de complexité, pas des contrôleurs. Ils cherchent à rendre le système <strong>lisible</strong> pour les humains, sans chercher à piloter à leur place (anti-over-automation).</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=11-naturalistic-decision-making-ndm--gary-klein-1989>11. Naturalistic Decision Making (NDM) — Gary Klein (1989)<a href=#11-naturalistic-decision-making-ndm--gary-klein-1989 class=hash-link aria-label="Lien direct vers 11. Naturalistic Decision Making (NDM) — Gary Klein (1989)" title="Lien direct vers 11. Naturalistic Decision Making (NDM) — Gary Klein (1989)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🟡</p>
+<p>Les experts utilisent le modèle <strong>RPD</strong> (Recognition-Primed Decision) : ils reconnaissent un pattern et simulent la première option viable. NEURO-SCALE adopte le <strong>Format RPD obligatoire (ADR-006)</strong> pour tous les agents : une seule action recommandée, impact, et "pourquoi".</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=12-predictive-processing--clark--friston-2013>12. Predictive Processing — Clark & Friston (2013)<a href=#12-predictive-processing--clark--friston-2013 class=hash-link aria-label="Lien direct vers 12. Predictive Processing — Clark & Friston (2013)" title="Lien direct vers 12. Predictive Processing — Clark & Friston (2013)" translate=no>​</a></h2>
+<p><strong>Niveau :</strong> 🔴</p>
+<p><strong>Enrichissement expérimental (P3)</strong> pour le <strong>WeakSignalDetector</strong>. Au lieu de seuils fixes, l'agent modélise un état attendu et signale les écarts structurels précocement (ex: détection à J+7 au lieu de J+45).</p>
+<hr/>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=synthèse-et-garde-fous>Synthèse et Garde-fous<a href=#synthèse-et-garde-fous class=hash-link aria-label="Lien direct vers Synthèse et Garde-fous" title="Lien direct vers Synthèse et Garde-fous" translate=no>​</a></h2>
+<table><thead><tr><th><strong>Fondement</strong><th><strong>Rôle dans NEURO-SCALE</strong><th><strong>Agent / ADR</strong><tbody><tr><td><strong>Ashby</strong><td>Justification de l'existence des agents<td>ADR-007<tr><td><strong>Edmondson</strong><td>Protection des individus (scores équipe)<td>ADR-004<tr><td><strong>Holland</strong><td>Philosophie : Lisibilité > Contrôle<td>ADR-012<tr><td><strong>Argyris</strong><td>Profondeur de l'apprentissage (SL/DL/DT)<td>RetroAgent / ADR-011</table>
+<blockquote>
+<p><strong>La règle d'or :</strong> Chaque décision d'architecture doit être rattachée à au moins un fondement de la Couche 1. Sinon, elle n'appartient pas au framework.</p>
+</blockquote></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/tutorial-basics/NeuroScaling  - Fondements Scientifiques.md" target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Éditer cette page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Pages de documentation"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#introduction--pourquoi-une-couche-scientifique- class="table-of-contents__link toc-highlight">Introduction — Pourquoi une Couche Scientifique ?</a><ul><li><a href=#objectif-de-ce-document class="table-of-contents__link toc-highlight">Objectif de ce document</a></ul><li><a href=#niveaux-de-certitude-scientifique class="table-of-contents__link toc-highlight">Niveaux de Certitude Scientifique</a><li><a href=#1-théorie-de-la-charge-cognitive-clt--sweller-1988 class="table-of-contents__link toc-highlight">1. Théorie de la Charge Cognitive (CLT) — Sweller (1988)</a><ul><li><a href=#la-théorie class="table-of-contents__link toc-highlight">La théorie</a><li><a href=#zone-de-flow class="table-of-contents__link toc-highlight">Zone de Flow</a></ul><li><a href=#2-modèle-de-mémoire-de-travail--baddeley--hitch-1974 class="table-of-contents__link toc-highlight">2. Modèle de Mémoire de Travail — Baddeley & Hitch (1974)</a><ul><li><a href=#la-théorie-1 class="table-of-contents__link toc-highlight">La théorie</a><li><a href=#pont-neuro-scale class="table-of-contents__link toc-highlight">Pont NEURO-SCALE</a></ul><li><a href=#3-dual-process-theory--kahneman--tversky-19742011 class="table-of-contents__link toc-highlight">3. Dual Process Theory — Kahneman & Tversky (1974–2011)</a><ul><li><a href=#la-théorie-2 class="table-of-contents__link toc-highlight">La théorie</a><li><a href=#pont-neuro-scale-1 class="table-of-contents__link toc-highlight">Pont NEURO-SCALE</a></ul><li><a href=#4-loi-de-la-variété-requise--ashby-1956 class="table-of-contents__link toc-highlight">4. Loi de la Variété Requise — Ashby (1956)</a><ul><li><a href=#la-théorie-3 class="table-of-contents__link toc-highlight">La théorie</a><li><a href=#justification-des-agents class="table-of-contents__link toc-highlight">Justification des agents</a></ul><li><a href=#5-high-reliability-organizations-hro--weick--sutcliffe-1999 class="table-of-contents__link toc-highlight">5. High Reliability Organizations (HRO) — Weick & Sutcliffe (1999)</a><li><a href=#6-psychological-safety--edmondson-1999 class="table-of-contents__link toc-highlight">6. Psychological Safety — Edmondson (1999)</a><li><a href=#7-flow--csikszentmihalyi-1990 class="table-of-contents__link toc-highlight">7. Flow — Csikszentmihalyi (1990)</a><li><a href=#8-cadre-cynefin--snowden-2007 class="table-of-contents__link toc-highlight">8. Cadre Cynefin — Snowden (2007)</a><li><a href=#9-double-loop-learning--argyris--schön-1978 class="table-of-contents__link toc-highlight">9. Double Loop Learning — Argyris & Schön (1978)</a><li><a href=#10-complex-adaptive-systems-cas--holland-1992 class="table-of-contents__link toc-highlight">10. Complex Adaptive Systems (CAS) — Holland (1992)</a><li><a href=#11-naturalistic-decision-making-ndm--gary-klein-1989 class="table-of-contents__link toc-highlight">11. Naturalistic Decision Making (NDM) — Gary Klein (1989)</a><li><a href=#12-predictive-processing--clark--friston-2013 class="table-of-contents__link toc-highlight">12. Predictive Processing — Clark & Friston (2013)</a><li><a href=#synthèse-et-garde-fous class="table-of-contents__link toc-highlight">Synthèse et Garde-fous</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item position=left href=/NeuroScaling/architecte>L'Architecte</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://stackoverflow.com/questions/tagged/docusaurus target=_blank rel="noopener noreferrer" class=footer__link-item>Stack Overflow<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://discordapp.com/invite/docusaurus target=_blank rel="noopener noreferrer" class=footer__link-item>Discord<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>More</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/NeuroScaling/blog>Blog</a><li class=footer__item><a href=https://github.com/facebook/docusaurus target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 NeuroScaling, Inc. Built with Docusaurus.</div></div></div></footer></div></body>

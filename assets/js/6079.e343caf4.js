@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkneuroscaling_site=self.webpackChunkneuroscaling_site||[]).push([["6079"],{6402(e,s,c){c.d(s,{createArchitectureServices:()=>r.S});var r=c(5016);c(9302)}}]);
