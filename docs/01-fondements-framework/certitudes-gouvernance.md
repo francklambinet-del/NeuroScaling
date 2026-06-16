@@ -56,7 +56,7 @@ graph TD
     H[HUMAIN<br>RTE, PM, PO, SM]:::humain
     
     subgraph Registre_R2 [Registre R2 : Agentique - IA Probabiliste]
-        R2_Core[24 Agents Cognitifs<br>Architecture Blackboard]:::r2
+        R2_Core[8 Agents Cognitifs<br>Architecture Blackboard]:::r2
         R2_Out[Analyses & Recommandations<br>Format RPD - ADR-006]:::r2
     end
     
@@ -76,7 +76,7 @@ graph TD
 ```
 
 * **Le Registre R1 - Déterministe (L'Algorithme) :** C'est le sanctuaire mathématique du système (briques `flow_metrics_engine.py`, `quality_guard.py`). Il audite la qualité des données (INVEST, DoR/DoD) et certifie les mesures. **Zéro LLM, zéro hallucination.**
-* **Le Registre R2 - Agentique (L'IA) :** C'est le réseau de neurones organisationnel (24 agents pilotés par l'architecture Blackboard). Les agents interprètent la complexité, croisent les patterns et émettent des recommandations, mais ils ont l'interdiction structurelle de falsifier ou réécrire les faits bruts issus de R1.
+* **Le Registre R2 - Agentique (L'IA) :** C'est le réseau de neurones organisationnel (8 agents pilotés par l'architecture Blackboard). Les agents interprètent la complexité, croisent les patterns et émettent des recommandations, mais ils ont l'interdiction structurelle de falsifier ou réécrire les faits bruts issus de R1.
 
 ---
 

@@ -41,7 +41,7 @@ graph TD
 ## 2. Immutabilité R1 et Isolation des Cycles de Vie
 
 Le Blackboard est l'unique espace de mémoire partagé où cohabitent les résultats mathématiques du Registre R1 et les analyses sémantiques du Registre R2. Cependant, une étanchéité absolue est maintenue :
-* **Lecture Universelle :** Les 24 agents de la Couche 4 possèdent un droit de lecture complet sur l'ensemble du graphe pour contextualiser leurs analyses.
+* **Lecture Universelle :** Les 8 agents de la Couche 4 possèdent un droit de lecture complet sur l'ensemble du graphe pour contextualiser leurs analyses.
 * **Écriture Asymétrique :** Les moteurs déterministes R1 (`flow_metrics_engine.py`, `quality_guard.py`) écrivent et certifient les faits bruts. Les agents du Registre R2 ont l'interdiction structurelle d'écraser ces données. Ils publient leurs conclusions sous forme de nœuds dépendants typés `DiagnosticEvent`.
 * **Persistance par Delta (Optimisation mémoire) :** Le Blackboard n'enregistre pas l'intégralité du graphe à chaque cycle. Il utilise un mécanisme de snapshotting différentiel pour capturer uniquement les changements d'état (deltas), minimisant l'impact sur le stockage et la mémoire vive.
 

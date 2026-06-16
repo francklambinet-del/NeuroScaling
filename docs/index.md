@@ -11,7 +11,7 @@ slug: /
 
 Dans les organisations à grande échelle, la complexité n’est pas un défi, c’est un poison. NeuroScaling est une **infrastructure de confiance** conçue pour filtrer le bruit informationnel, protéger votre capacité de décision et garantir la prévisibilité du delivery au sein de vos Trains SAFe (Agile Release Trains).
 
-Le pilotage d'un train complexe ne devrait pas consister à consolider manuellement des rapports Jira incohérents ou à subir la saturation des processus. NeuroScaling déploie une armée de **24 agents cognitifs spécialisés** qui agissent comme le système immunitaire organisationnel de votre delivery.
+Le pilotage d'un train complexe ne devrait pas consister à consolider manuellement des rapports Jira incohérents ou à subir la saturation des processus. NeuroScaling déploie une armée de **8 agents cognitifs spécialisés** qui agissent comme le système immunitaire organisationnel de votre delivery.
 
 ---
 

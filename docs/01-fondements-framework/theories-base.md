@@ -39,7 +39,7 @@ Issu de la cybernétique de W. Ross Ashby, ce théorème fondamental stipule que
 ### Le Pont NeuroScaling
 Un train de livraison agile à l'échelle est un système adaptatif complexe caractérisé par des perturbations continues et des interdépendances dynamiques. Face à cette complexité, un Release Train Engineer (RTE) humain, même doté d'une forte séniorité et équipé de tableaux de bord statiques, ne possède pas la variété requise pour absorber et réguler l'instabilité du flux en temps réel.
 
-* **La Réponse Systémique :** NeuroScaling déploie un **Registre Agentique (R2) de 24 agents spécialisés autonomes**.
+* **La Réponse Systémique :** NeuroScaling déploie un **Registre Agentique (R2) de 8 agents spécialisés autonomes**.
 En confrontant ce réseau d'agents spécialisés aux variables du terrain, le système propose une analogie fonctionnelle permettant d'isoler les facteurs d'instabilité du flux. Dans le cadre du déploiement initial (MVP), cette surface est restreinte à 4 ou 5 agents clés pour éviter la *fatigue d'alerte*.
 
  * **Composant Associé :** L'architecture globale du Registre Agentique coordonnée par le Blackboard.
@@ -85,7 +85,7 @@ L'application d'une logique de traitement uniforme à des problèmes de natures 
 NeuroScaling résout la crise de confiance liée à l'utilisation de l'intelligence artificielle en entreprise par un découplage strict entre la mesure et le raisonnement, matérialisé par deux registres étanches :
 
 * **Le Registre R1 - Déterministe (L'Algorithme) :** Composé de moteurs analytiques purs (`flow_metrics_engine.py`, `vsm_engine.py`, `quality_guard.py`). Il exécute des calculs exacts sur les données structurelles (conformité DoR/DoD, détection de cycles de dépendances). **Zéro LLM, zéro hallucination.**
-* **Le Registre R2 - Agentique (L'IA) :** Composé de l'armée de 24 agents coordonnés par l'architecture Blackboard Étendue. Les agents interprètent, diagnostiquent et recommandent, mais ne peuvent en aucun cas falsifier ou réécrire les métriques brutes certifiées par le registre R1.
+* **Le Registre R2 - Agentique (L'IA) :** Composé de l'armée de 8 agents coordonnés par l'architecture Blackboard Étendue. Les agents interprètent, diagnostiquent et recommandent, mais ne peuvent en aucun cas falsifier ou réécrire les métriques brutes certifiées par le registre R1.
 
 ---
 

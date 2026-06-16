@@ -7,7 +7,7 @@ slug: /agents-specialite
 
 # Le Catalogue des Agents de Spécialité
 
-L'infrastructure de **Couche 4** répartit sa puissance de calcul et d'analyse sémantique à travers un réseau distribué de **24 agents cognitifs**. Chaque agent est un conteneur de logique spécialisé, totalement étanche de ses pairs, interagissant uniquement par lecture et écriture de messages typés sur l'architecture Blackboard Étendue.
+L'infrastructure de **Couche 4** répartit sa puissance de calcul et d'analyse sémantique à travers un réseau distribué de **8 agents cognitifs**. Chaque agent est un conteneur de logique spécialisé, totalement étanche de ses pairs, interagissant uniquement par lecture et écriture de messages typés sur l'architecture Blackboard Étendue.
 
 Voici les spécifications d'ingénierie des 4 agents maîtres du framework.
 

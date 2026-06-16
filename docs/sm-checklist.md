@@ -23,6 +23,7 @@ $$
 \text{WIP Saturation} = \frac{\text{Nombre de Stories actives (In Progress + In Review)}}{\text{Nombre de Développeurs} \times 1.5} \times 100
 $$
 
+
 > 🚨 **Seuil d'Alerte :** Si le taux dépasse 75%, le flux est considéré comme saturé. Le SM doit interdire l'ouverture de toute nouvelle Story lors du Daily et forcer la résolution des tâches en cours ("Stop starting, start finishing").
 
 ### B. L'Index de Stagnation (Stories Zombies)
@@ -32,12 +33,14 @@ $$
 \text{Age Zombie} = t_{\text{actuel}} - t_{\text{dernière\_activité}} > 2 \text{ jours}
 $$
 
+
 ### C. Le Ratio d'Étranglement de la QA (Review Bottleneck)
 Mesure l'accumulation des tickets en attente de validation ou de relecture :
 
 $$
 \text{Ratio QA} = \frac{\text{Stories en 'In Review' / 'Ready for QA'}}{\text{Stories en 'In Progress'}}
 $$
+
 
 ---
 

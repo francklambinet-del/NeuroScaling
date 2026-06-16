@@ -7,7 +7,7 @@ slug: /cerveau-core
 
 # Le Cerveau Central & Orchestration Agentique
 
-La Couche 4 de Neuro-Scale donne vie au framework à travers une armée de **24 agents cognitifs spécialisés**. Pour éviter le chaos décisionnel et garantir une exécution logicielle rigoureuse, ces agents ne travaillent pas en silo. Ils sont gouvernés, coordonnés et arbitrés par un noyau de composants exécutifs appelé le **Cerveau Core**.
+La Couche 4 de Neuro-Scale donne vie au framework à travers une armée de **8 agents cognitifs spécialisés**. Pour éviter le chaos décisionnel et garantir une exécution logicielle rigoureuse, ces agents ne travaillent pas en silo. Ils sont gouvernés, coordonnés et arbitrés par un noyau de composants exécutifs appelé le **Cerveau Core**.
 
 Ce cœur exécutif repose sur deux composants majeurs :
 1. **`flow_dispatcher.py` (Le Routeur) :** Le point d'entrée qui qualifie la complexité et aiguille les flux.
@@ -65,7 +65,7 @@ graph TD
     class A1,A2,A3 agent;
 ```
 ### Principes de fonctionnement :
-* **Découplage absolu :** Les 24 agents ne se connaissent pas et n'interagissent pas directement. Ils lisent et écrivent exclusivement sur un espace de mémoire partagé et structuré : le Blackboard.
+* **Découplage absolu :** Les 8 agents ne se connaissent pas et n'interagissent pas directement. Ils lisent et écrivent exclusivement sur un espace de mémoire partagé et structuré : le Blackboard.
 * **Complexité Optimisée en $O(1)$ :** La transition d'un schéma propositionnel ("faits à plat") vers un réseau orienté objet (Conteneurs, Propriétés Communes, Liens) permet au système de scanner et de faire correspondre les règles à la volée, indépendamment de la taille du train.
 * **Immutabilité du Registre R1 :** Les composants R1 (Capteurs) écrivent les données factuelles brutes sur le Blackboard. Les agents R2 ont un droit de lecture universel, mais un droit d'écriture limité uniquement à la publication de leurs diagnostics ou de leurs doutes. **L'IA ne peut jamais falsifier une mesure algorithmique.**
 
