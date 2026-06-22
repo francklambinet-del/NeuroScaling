@@ -24,7 +24,7 @@ Pionnier de l'**Agilité Augmentée par l'IA**, je m'attache à maximiser la per
 Mon parcours s'articule autour de trois piliers exécutifs : le pilotage du scope, la sécurisation des indicateurs d'impact et l'instauration d'une gouvernance de confiance.
 
 ### 1. Gouvernance de Programmes Complexes & Multi-Équipes
-* **Secteur Bancaire (BPI, BNP Paribas Personal Finance) :** Direction opérationnelle et coordination de trains d'envergure stratégique (jusqu'à 25 équipes / 150+ collaborateurs). Synchronisation transversale des livraisons de valeur, sécurisation du *PI Readiness* et modélisation de trajectoires de transformation.
+* **Secteur Bancaire (BPI, BNP Paribas Personal Finance) :** Secteur Bancaire (BPI, BNP Paribas Personal Finance) : Pilotage opérationnel et optimisation des flux de livraison au sein de dispositifs agiles d'envergure stratégique. Expérience concrète de la complexité à grande échelle comme Scrum Master au cœur d'un train de 25 équipes (150+ collaborateurs) et en tant que RTE Adjoint sur un train de 6 équipes. Focus majeur sur la *synchronisation transversale de la valeur*, la sécurisation du *PI Readiness*, la gestion des *adhérences systémiques* et la modélisation de trajectoires de transformation.
 * **Résultat clé :** Alignement de portefeuilles budgétaires et sécurisation complète du delivery sur des programmes à forte visibilité politique et financière.
 
 ### 2. Pilotage du Flux de Valeur & Optimisation Financière
