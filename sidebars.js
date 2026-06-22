@@ -30,11 +30,13 @@ const sidebars = {
             collapsible: true,
             collapsed: false,
             items: [
+                'moteur-architecture/indicateurs-calculs',
                 'moteur-architecture/filtre-contextuel',
                 'moteur-architecture/blackboard-etendu',
                 'moteur-architecture/cerveau-core',
                 'moteur-architecture/agents-specialite',
                 'moteur-architecture/gestion-distillats',
+                'moteur-architecture/Registres',
             ],
         },
         {

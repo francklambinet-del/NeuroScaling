@@ -6,13 +6,15 @@
 
 import { themes as prismThemes } from 'prism-react-renderer';
 
+const remarkMath = require('remark-math');
+const rehypeKatex = require('rehype-katex');
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'NeuroScaling',
-  tagline: 'Scaling Architecture ',
-  favicon: 'img/favicon.ico',
+  tagline: 'Scaling Architecture',
+  favicon: 'img/logo-neuroscaling_icon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -20,26 +22,41 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://francklambinet-del.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/NeuroScaling/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'francklambinet-del', // Usually your GitHub org/user name.
+  projectName: 'NeuroScaling', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
   // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
+  // useful metadata like html lang.
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'fr',
+    locales: ['fr'],
   },
 
+  // Configuration d'activation globale de Mermaid.js pour MDX
+  markdown: {
+    mermaid: true,
+  },
+
+  // Intégration du thème et du parseur de diagrammes Mermaid
+  themes: ['@docusaurus/theme-mermaid'],
+  // À insérer juste au-dessus de presets: [
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      type: 'text/css',
+      integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQWJaXtaYnyODDOqAXfRI7ChT3GUDax96b4841DL',
+      crossorigin: 'anonymous',
+    },
+  ],
   presets: [
     [
       'classic',
@@ -47,8 +64,10 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          // SÉCURITÉ MDX : Ajout des plugins pour parser le LaTeX et les accolades {}
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
+          routeBasePath: '/',
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
@@ -58,11 +77,11 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          // Ajout également sur le blog au cas où tu y glisses des formules
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -77,15 +96,15 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/neuroscaling-banner.png',
       colorMode: {
-        respectPrefersColorScheme: true,
+        defaultMode: 'dark',
+        respectPrefersColorScheme: false,
       },
       navbar: {
-        title: 'My Site',
+        title: 'NeuroScaling',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'NeuroScaling Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -110,8 +129,10 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/intro',
+                label: 'Framework',
+                to: '/architecte',
+                label: 'L\'Architecte',
+                position: 'left',
               },
             ],
           },
@@ -125,10 +146,6 @@ const config = {
               {
                 label: 'Discord',
                 href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
               },
             ],
           },
@@ -146,7 +163,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} NeuroScaling, Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,

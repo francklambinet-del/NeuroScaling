@@ -5,9 +5,9 @@
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
 import { themes as prismThemes } from 'prism-react-renderer';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
-const remarkMath = require('remark-math');
-const rehypeKatex = require('rehype-katex');
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 /** @type {import('@docusaurus/types').Config} */
@@ -48,6 +48,15 @@ const config = {
 
   // Intégration du thème et du parseur de diagrammes Mermaid
   themes: ['@docusaurus/theme-mermaid'],
+
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      type: 'text/css',
+      integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQWJaXtaYnyODDOqAXfRI7ChT3GUDax96b4841DL',
+      crossorigin: 'anonymous',
+    },
+  ],
 
   presets: [
     [
@@ -121,10 +130,8 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Framework',
+                label: "L'Architecte",
                 to: '/architecte',
-                label: 'L\'Architecte',
-                position: 'left',
               },
             ],
           },
