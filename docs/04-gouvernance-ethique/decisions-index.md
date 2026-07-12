@@ -61,6 +61,8 @@ Les décisions respectent la nomenclature officielle du cycle de vie de l'ingén
 | **ADR-029** | Représentation par Deltas de l'état du Blackboard | 🟢 Validé | Optimisation mémoire majeure : Seuls les écarts d'états sont historisés. |
 | **ADR-030** | Routage automatique des anomalies via Cynefin | 🟢 Validé | Implémentation de `cynefin_router.py` pour qualifier la sévérité des dérives. |
 | **ADR-031** | Persistance et export du KnowledgeGraph | 🟢 Validé | Persistance assurée via `data/knowledge_graph_snapshot.json` dans `analyze.py`. |
+| **ADR-032** | DQS Gate R2 — Seuil de qualité données obligatoire | 🟢 Validé | Aucun agent R2 ne s'active si DQS < 70. 26 règles D1→D6 dans `dqs_rules.json`. |
+| **ADR-033** | Loop Engineering — Séparation générateur/évaluateur & Budget Guard | 🟢 Validé | `EvaluatorAgent` adversarial (4 checks, PASS/REJECT strict) · `budget_guard_node` premier nœud LangGraph · `loop_limits.yaml` · boucle DQS autonome supervisée. |
 
 ---
 
@@ -90,5 +92,5 @@ Le tableau suivant permet aux auditeurs et aux développeurs de vérifier rapide
 
 ## 📋 Prochains ADRs à Rédiger (Feuille de Route)
 
-* **ADR-032 [Priorité P1]** : Enrichissement du `FlowMetricsEngine` — Intégration de 6 indicateurs simples (*Ratio Features*, *Tech Debt*, *Support*, *Densité Défauts*, *Taux Débordement*, *Prédictibilité Sprint*).
-* **ADR-033 [Priorité P2]** : Enrichissement du `FlowMetricsEngine` / `VSMEngine` — Intégration de 5 indicateurs au niveau PI (*Vélocité PI*, *Prédictibilité PI*, *Taux Complétion Features*, *Epic Cycle Time*, *Scope Creep*).
+* **ADR-034 [Priorité P1]** : Enrichissement du `FlowMetricsEngine` — Intégration de 6 indicateurs simples (*Ratio Features*, *Tech Debt*, *Support*, *Densité Défauts*, *Taux Débordement*, *Prédictibilité Sprint*).
+* **ADR-035 [Priorité P2]** : Enrichissement du `FlowMetricsEngine` / `VSMEngine` — Intégration de 5 indicateurs au niveau PI (*Vélocité PI*, *Prédictibilité PI*, *Taux Complétion Features*, *Epic Cycle Time*, *Scope Creep*).
