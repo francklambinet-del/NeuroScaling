@@ -90,6 +90,10 @@ const config = {
         theme: {
           customCss: './src/css/custom.css',
         },
+        gtag: {
+          trackingID: 'G-GR3DG6JWGC', // Votre ID Google Analytics
+          anonymizeIP: true,
+        },
       }),
     ],
   ],
