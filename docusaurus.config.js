@@ -16,11 +16,6 @@ const config = {
   tagline: 'Scaling Architecture',
   favicon: 'img/logo-neuroscaling_icon.ico',
 
-  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
-  future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
-  },
-
   // Set the production url of your site here
   url: 'https://francklambinet-del.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -46,8 +41,21 @@ const config = {
     mermaid: true,
   },
 
-  // Intégration du thème et du parseur de diagrammes Mermaid
+  // Positionnement correct des extensions de thèmes et plugins
   themes: ['@docusaurus/theme-mermaid'],
+  plugins: [
+    [
+      'docusaurus-plugin-image-zoom',
+      {
+        // Cible uniquement les images avec cette classe précise et les images de la doc
+        selector: '.zoomable-img, .markdown img',
+        options: {
+          background: 'rgba(10, 10, 10, 0.85)', // Fond immersif pour le mode sombre par défaut
+          scrollOffset: 40,
+        },
+      },
+    ],
+  ],
 
   stylesheets: [
     {
@@ -110,7 +118,7 @@ const config = {
         title: 'NeuroScaling',
         logo: {
           alt: 'NeuroScaling Logo',
-          src: 'img/logo.svg',
+          src: 'img/logo-neuroscaling_accueil.png',
         },
         items: [
           {

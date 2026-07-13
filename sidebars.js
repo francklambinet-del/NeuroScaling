@@ -22,6 +22,7 @@ const sidebars = {
                 'fondements-framework/theories-base',
                 'fondements-framework/certitudes-gouvernance',
                 'fondements-framework/sept-piliers',
+                'fondements-framework/influences-ingenierie',
             ],
         },
         {
