@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkneuroscaling_site=globalThis.webpackChunkneuroscaling_site||[]).push([[4229],{4229(e,s,i){i.d(s,{createCynefinServices:()=>a.t});var a=i(3486);i(1400)}}]);
