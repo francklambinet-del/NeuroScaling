@@ -15,15 +15,18 @@ Neuro-Scale résout ce paradigme par son **Moteur de Gestion des Distillats** (`
 
 ## 1. Le Principe de la Triple Fusion Contextuelle
 
-À l'activation d'un agent par le `DiagnosticOrchestrator`, le moteur compile une invite structurée en superposant trois niveaux de données étanches :
+*Correction* : l'injection des distillats n'est pas orchestrée par un composant central — `diagnostic_orchestrator.py` ne fait ni appel d'agent ni injection de prompt (cf. `02-moteur-architecture/cerveau-core.md`). Chaque agent construit lui-même son en-tête de contexte à l'import de son module, en appelant directement `build_framework_context()` (`_bfc`) — **5 agents sur l'ensemble du registre le font** : `MentorAgent`, `StrategicAdvisor`, `RetroAgent`, `TriageAgent`, `BacklogAgent`. Le Maker principal du graphe, `executor_node`, n'en injecte aucun. Le moteur compile une invite en superposant trois niveaux de données :
 
 ```mermaid
 graph TD
     %% Configuration globale des styles
-    classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px;
-    classDef coucheA fill:#fff9c4,stroke:#fbc02d,stroke-width:2px;
-    classDef coucheB fill:#bbdefb,stroke:#1976d2,stroke-width:2px;
-    classDef coucheC fill:#c8e6c9,stroke:#388e3c,stroke-width:2px;
+    classDef default fill:#2b2b2b,stroke:#555,stroke-width:1px,color:#ffffff;
+    classDef coucheA fill:#7a5c00,stroke:#fbc02d,stroke-width:2px,color:#ffffff;
+    classDef coucheB fill:#0d47a1,stroke:#1976d2,stroke-width:2px,color:#ffffff;
+    classDef coucheC fill:#1b5e20,stroke:#388e3c,stroke-width:2px,color:#ffffff;
+
+    %% Style spécifique pour le subgraph
+    style Fusion fill:#1a1a2e,stroke:#555555,stroke-width:1.5px,color:#ffffff;
 
     subgraph Fusion [Structure de la Triple Fusion Contextuelle]
         C[COUCHE C : SYNTHÈSE DIAGNOSTIQUE<br/>Registre R2 - Sémantique<br/>Historique des patterns · Signaux faibles · Corrélations]
@@ -37,11 +40,11 @@ graph TD
     class A coucheA;
     class B coucheB;
     class C coucheC;
-    ```
+```
 
-* **La Couche A (Statique) :** Les règles immuables des frameworks (SAFe, Team Topologies, ToC) stockées sous forme de fichiers de connaissances statiques dans le dossier `knowledge/`.
-* **La Couche B (Calculée) :** Les faits mathématiques bruts extraits en temps réel par les capteurs déterministes et publiés sur le Blackboard.
-* **La Couche C (Recommandée) :** Les conclusions et patterns sémantiques identifiés lors des cycles précédents par les autres agents.
+* **La Couche A (Statique) :** Les règles des frameworks (Team Topologies, Théorie des Contraintes, OODA, VSM, Wardley) stockées en JSON — *correction de chemin* : dans `Documentation/`, pas `knowledge/` (`distillats.py:32`).
+* **La Couche B (Calculée) :** Les faits mathématiques bruts extraits en temps réel par les capteurs déterministes du Registre R1.
+* **La Couche C (Recommandée) :** Les conclusions et patterns sémantiques identifiés lors des cycles précédents, publiés par les agents R2 sur la Zone R2 (`OntologyGraph`, `publish_agent_observation()`).
 
 ---
 
@@ -49,57 +52,51 @@ graph TD
 
 Le composant charge et distribue les règles selon une matrice de dépendances optimisée en mémoire via un cache de type LRU (`lru_cache`), évitant les accès disque redondants.
 
-Structure d'un fichier de Distillat (knowledge/team_topologies.json)
-```JSON
+Structure réelle d'un fichier de distillat (`Documentation/TeamTopologies.json`) — *remplace un schéma précédent (`rules[]`, `rule_id`, `TT-042`) sans aucune correspondance dans les 5 fichiers réels* :
+
+```json
 {
   "framework": "Team Topologies",
-  "version": "4.0",
-  "rules": [
-    {
-      "rule_id": "TT-042",
-      "interaction_type": "Collaboration",
-      "trigger_condition": "Friction inter-équipes prolongée sur composant partagé",
-      "severity": "HIGH",
-      "system_instruction": "IF friction_score > 0.75 AND boundary == 'Stream-Aligned/Complicated-Subsystem' THEN classifier comme dysfonctionnement topologique. Recommander un transfert de propriété du composant ou un alignement des backlogs."
-    }
+  "auteur": "Matthew Skelton et Manuel Pais",
+  "annee": "2019",
+  "agent_cible": "NEURO-SCALE Architect & Flow Optimizer",
+  "principes_fondateurs": [
+    { "id": "P1", "principe": "Primauté de la Charge Cognitive", "implication_agent": "L'agent doit rejeter toute affectation de périmètre dépassant la mémoire de travail d'une équipe type (5-9 personnes)." }
+  ],
+  "regles_decisionnelles": [
+    { "id": "R2", "si": "Une interaction de type 'Collaboration' entre deux équipes dépasse 8 semaines consécutives", "alors": "Signaler un goulot d'étranglement déguisé et recommander une interface X-as-a-Service ou une fusion de périmètre.", "niveau_hitl": 2 }
+  ],
+  "signaux_alerte": [
+    { "id": "S2", "signal": "Saturation Cognitive (Context-Switching)", "seuil": "> 3 domaines métier distincts par équipe", "urgence": "CRITIQUE" }
+  ],
+  "anti_patterns": [
+    { "id": "AP2", "pattern": "Platform as a Ticket Queue", "risque": "Transformation de la plateforme en goulot d'étranglement centralisé au lieu d'un libre-service." }
+  ],
+  "metriques_calculables": [
+    { "id": "M2", "nom": "Hand-off Ratio", "formule": "external_dependencies_waiting_time / lead_time_total", "interpretation": "Mesure l'autonomie de l'équipe Stream-aligned ; doit tendre vers 0." }
   ]
 }
 ```
 
-Le moteur s'appuie sur des schémas de configuration stricts où chaque règle métier se voit attribuer un identifiant unique, un type d'interaction qualifié, un déclencheur algorithmique précis ainsi qu'une sévérité d'exécution. Cela permet au script d'assembler ces éléments et d'injecter le bloc final directement en tête de la configuration de l'agent. 
+Note technique (documentée dans le code lui-même, `distillats.py:14-20`) : `TeamTopologies.json` et `WardleyMap.json` contiennent des résidus `[cite_start]`/`[cite: N]` de génération — le même défaut que celui purgé du site documentaire (cf. `03-guides-roles/rte-pi-readiness.md`). Le chargeur les neutralise automatiquement (`_load_json_tolerant()`) ; ce n'est pas un défaut fonctionnel, mais un nettoyage qui reste à faire sur les fichiers sources eux-mêmes, hors périmètre de ce lot documentaire.
 
-### Exemple d'Empreinte Générée à l'Exécution (`_FRAMEWORK_HEADER`)
+Il n'existe pas de clé `rule_id` ni de convention `TT-042` : chaque règle porte un `id` court (`P1`, `R2`, `S2`, `AP2`, `M2`), propre à sa catégorie (`principes_fondateurs`, `regles_decisionnelles`, `signaux_alerte`, `anti_patterns`, `metriques_calculables`).
 
-### SYSTEM INSTRUCTION : _FRAMEWORK_HEADER
-[GOUVERNANCE] : Vous opérez sous le référentiel Neuro-Scale V4. Toute recommandation doit être adossée à une règle explicite.
+### Exemple réel d'en-tête généré (`build_framework_context`, `mentor_agent.py:29-34`)
 
-[DISTILLAT PRIMAIRE : TEAM TOPOLOGIES | ID: TT-042]
-* Règle : En cas de friction supérieure à 0.75 entre une équipe Stream-Aligned et une équipe Complicated-Subsystem, vous devez isoler les tickets otages et proposer un arbitrage topologique au RTE.
-
-[FAITS BLACKBOARD CERTIFIÉS R1 : CALCULÉ]
-* team_friction_score : 0.84
-* blocked_story_points : 24
-* active_gridlocks : 1
-
-[DIRECTIVE DE SORTIE] : Générez votre diagnostic uniquement au format RPD (ADR-006) en citant le Rule_ID associé.
-
-* **Gouvernance :** Vous opérez sous le référentiel Neuro-Scale V4. Toute recommandation doit être adossée à une règle explicite.
-* **Distillat Primaire (Team Topologies - Règle active) :** En cas de friction supérieure à 0.75 entre une équipe Stream-Aligned et une équipe Complicated-Subsystem, vous devez isoler les tickets otages et proposer un arbitrage topologique au RTE.
-* **Faits Blackboard Certifiés R1 (`CALCULÉ`) :** score de friction à 0.84, 24 Story Points bloqués, 1 blocage en chaîne actif.
-* **Directive de Sortie :** Générez votre diagnostic uniquement au format RPD (ADR-006) en citant le `rule_id` associé.
+Un agent qui injecte ce distillat obtient un bloc de contexte assemblé par `build_framework_context("team_topologies", ...)` — une fonction de chargement déterministe (zéro LLM), pas un mécanisme de « fusion » orchestré par un tiers. Le format exact du bloc dépend des paramètres passés (`include_rules`, `include_signals`, `include_antipatterns`, `max_rules`) ; il n'a pas été reconstruit ici pour éviter de fabriquer un second exemple non vérifié — se référer directement à `knowledge/distillats.py:135-150` pour la spécification de fonction.
 
 ---
 
-## 3. Matrice de Granularité : Distillats Primaires vs Secondaires
+## 3. Granularité réelle : paramètres de `build_framework_context`
 
-Pour optimiser la vitesse de traitement et garantir l'étanchéité des rôles, le moteur distribue les connaissances selon deux niveaux de granularité :
-* **Les Distillats Primaires (Mastery) :** L'agent possède la logique métier profonde du framework. Il est configuré pour interpréter les nuances sémantiques de ce domaine (ex : Le `DependencyAgent` maîtrise le distillat Team Topologies).
-* **Les Distillats Secondaires (Guardrails) :** L'agent ne reçoit que les expressions logiques de surface sous forme de conditions IF/THEN strictes, agissant comme des barrières de sécurité pour son raisonnement (ex : Le `BacklogAgent` reçoit le distillat Theory of Constraints au niveau secondaire pour s'assurer que ses actions de raffinement aident à débloquer le goulot d'étranglement général du train).
+*Correction* : une distinction « Distillats Primaires (Mastery) / Secondaires (Guardrails) » figurait ici — aucune trace de ce vocabulaire ni de ce mécanisme à deux niveaux dans `distillats.py`. La granularité réelle est plus simple : chaque appel à `build_framework_context()` choisit son propre `max_rules` et active ou non `include_rules`/`include_signals`/`include_antipatterns` — un réglage par agent, pas une classification à deux niveaux nommée. `DependencyAgent`, cité en exemple ici, **n'injecte aucun distillat** (vérifié : 0 occurrence de `build_framework_context` dans `dependency_agent.py`, cohérent avec son statut zéro-LLM documenté dans `02-moteur-architecture/agents-specialite.md`).
 
 ---
 
 ## 4. Sûreté logicielle & Maintenance Centralisée
 
-Ce modèle d'architecture offre deux garanties fondamentales pour la pérennité de votre infrastructure :
-* **Zéro dérive de version (Single Source of Truth) :** Les règles d'entreprise et les seuils méthodologiques ne sont jamais codés en dur dans les invites des agents. Si vous ajustez la zone cible de charge cognitive de Sweller (ex : passage de 40-65% à 50-70%), la modification est effectuée à un seul endroit : dans le fichier de configuration de la Couche 1. Le moteur `distillats.py` propage instantanément la nouvelle règle à l'ensemble de l'armée d'agents au cycle suivant.
-* **Auditabilité Totale :** En forçant l'intégration du `rule_id` tout au long de la chaîne de traitement, le framework permet de remonter instantanément de l'interface utilisateur (Bento Grid) jusqu'au fichier de configuration d'origine, garantissant une transparence totale pour les comités de gouvernance.
+*Ces deux garanties étaient présentées comme acquises. Vérification faite, ce sont précisément les deux propriétés que le code n'a pas — corrigées ci-dessous plutôt que reformulées, pour ne pas masquer l'écart.*
+
+* **Zéro dérive de version — non tenu.** L'exemple donné ici (« passer de 40-65% à 50-70% en un seul endroit ») est **précisément le cas où il faut éditer du Python** : les seuils Sweller (`FLOW_ZONE_MIN`/`FLOW_ZONE_MAX`) sont codés en dur dans `capacity_agent.py`, pas dans un distillat. Et la propagation ne toucherait de toute façon que les **5 agents** qui injectent effectivement un distillat (`MentorAgent`, `StrategicAdvisor`, `RetroAgent`, `TriageAgent`, `BacklogAgent`) — pas « l'ensemble de l'armée d'agents ». Ceci infirme l'intention de centralisation documentée par ailleurs (cf. `04-gouvernance-ethique/decisions-index.md`, `DRIFT-005` : ~60 seuils métier codés en dur, 0 lu depuis un distillat).
+* **Auditabilité de bout en bout — chaîne rompue à la source.** Le check `_check_rule_id` existe bien (`EvaluatorAgent`, pas un mécanisme de `distillats.py`), mais **aucun `rule_id` n'est présent dans les distillats sources** (§2 : les clés réelles sont `id` par catégorie — `P1`, `R2`, `S2`…). Le check vérifie une référence vers un référentiel qui ne contient pas cette clé sous ce nom — la chaîne d'auditabilité est rompue avant même d'atteindre l'agent.

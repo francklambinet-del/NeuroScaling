@@ -22,6 +22,7 @@ const sidebars = {
                 'fondements-framework/theories-base',
                 'fondements-framework/certitudes-gouvernance',
                 'fondements-framework/sept-piliers',
+                'fondements-framework/strategie_inSilico',
                 'fondements-framework/influences-ingenierie',
             ],
         },
@@ -47,7 +48,7 @@ const sidebars = {
             collapsed: false,
             items: [
                 'guides-roles/rte-commando',
-                'guides-roles/nxe-pi-readiness',
+                'guides-roles/rte-pi-readiness',
                 'guides-roles/po-value-management',
                 'guides-roles/sm-resilience',
                 'sm-checklist',

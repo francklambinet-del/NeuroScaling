@@ -39,10 +39,10 @@ Issu de la cybernétique de W. Ross Ashby, ce théorème fondamental stipule que
 ### Le Pont NeuroScaling
 Un train de livraison agile à l'échelle est un système adaptatif complexe caractérisé par des perturbations continues et des interdépendances dynamiques. Face à cette complexité, un Release Train Engineer (RTE) humain, même doté d'une forte séniorité et équipé de tableaux de bord statiques, ne possède pas la variété requise pour absorber et réguler l'instabilité du flux en temps réel.
 
-* **La Réponse Systémique :** NeuroScaling déploie un **Registre Agentique (R2) de 8 agents spécialisés autonomes**.
+* **La Réponse Systémique :** NeuroScaling déploie un **Registre Agentique (R2)** de plusieurs agents spécialisés (registre complet et compte vérifié : `02-moteur-architecture/Registres.mdx`).
 En confrontant ce réseau d'agents spécialisés aux variables du terrain, le système propose une analogie fonctionnelle permettant d'isoler les facteurs d'instabilité du flux. Dans le cadre du déploiement initial (MVP), cette surface est restreinte à 4 ou 5 agents clés pour éviter la *fatigue d'alerte*.
 
- * **Composant Associé :** L'architecture globale du Registre Agentique coordonnée par le Blackboard.
+ * **Composant Associé :** le graphe LangGraph (`agents/orchestrators/state_monitor/graph.py`) et la Zone R2 (`OntologyGraph`) — cf. `02-moteur-architecture/blackboard-etendu.md` pour la nomenclature des zones mémoire.
 
 ---
 
@@ -76,7 +76,7 @@ L'application d'une logique de traitement uniforme à des problèmes de natures 
 * **Le Routage Dynamique :** NeuroScaling utilise Cynefin pour classifier la nature des anomalies ou des frictions identifiées sur le train. Le comportement du framework s'adapte automatiquement au domaine détecté :
     * **Domaine du Compliqué :** Résolution déterministe, mathématique et algorithmique via le Registre R1 (ex: calculs d'intégrité de données par le `Quality Guard`).
     * **Domaine du Complexe :** Raisonnement par hypothèses, corrélations croisées, sondages et diagnostics probabilistes via le Registre R2 (Orchestration Agentique).
-* **Composants Core :** `flow_dispatcher.py` (Routeur Cynefin) / `cynefin_router.py`
+* **Composants Core :** `flow_dispatcher_node` appelle `okr_engine.build_flow_dispatcher_analysis`, qui appelle `cynefin_router.classify_cynefin` (chaîne réelle, cf. `02-moteur-architecture/cerveau-core.md`).
 
 ---
 
@@ -85,24 +85,27 @@ L'application d'une logique de traitement uniforme à des problèmes de natures 
 NeuroScaling résout la crise de confiance liée à l'utilisation de l'intelligence artificielle en entreprise par un découplage strict entre la mesure et le raisonnement, matérialisé par deux registres étanches :
 
 * **Le Registre R1 - Déterministe (L'Algorithme) :** Composé de moteurs analytiques purs (`flow_metrics_engine.py`, `vsm_engine.py`, `quality_guard.py`). Il exécute des calculs exacts sur les données structurelles (conformité DoR/DoD, détection de cycles de dépendances). **Zéro LLM, zéro hallucination.**
-* **Le Registre R2 - Agentique (L'IA) :** Composé de l'armée de 8 agents coordonnés par l'architecture Blackboard Étendue. Les agents interprètent, diagnostiquent et recommandent, mais ne peuvent en aucun cas falsifier ou réécrire les métriques brutes certifiées par le registre R1.
+* **Le Registre R2 - Agentique (L'IA) :** Composé de plusieurs agents, nœuds d'un graphe LangGraph à routage explicite. Les agents interprètent, diagnostiquent et recommandent, mais ne peuvent en aucun cas falsifier ou réécrire les métriques brutes certifiées par le registre R1 — invariant vérifié (`ADR-021`), aucune écriture R2 trouvée sur le `KnowledgeGraph`.
 
 ---
 
 ## 📊 Matrice de Synthèse des Fondements Académiques (Couche 1)
 
-Le framework attribue à chaque fondement un **Niveau de Certitude Scientifique** (Niveau 1 : Irréfutable, Niveau 2 : Robuste, Niveau 3 : Expérimental) qui régit strictement la gouvernance et le degré d'autonomie algorithmique du système.
+Le framework attribue à chaque fondement un **Niveau de Certitude Scientifique** qui régit la gouvernance et le degré d'autonomie algorithmique du système. *Correction de vocabulaire (2026-08-02)* : le code n'admet que trois labels de certitude — `CALCULÉ` / `PROBABLE` / `NON VÉRIFIÉ` (`diagnostic_orchestrator.py:34-36`) — et ne connaît aucun palier « Irréfutable ». Le code est plus rigoureux que ce que la documentation affirmait ; le palier théorique de cette page est désormais nommé **ÉTABLI** (alignement sur `04-gouvernance-ethique/certitudes-gouvernance.md`, seul fichier du corpus à avoir utilisé ce terme dès l'origine).
+
+*Correction de périmètre* : cette matrice listait 7 fondements ; la page d'accueil (`index.md`) en annonce 8 (Sweller, Kahneman, Cynefin, Ashby, Weick, Argyris, Holland/CAS, Edmondson). Alignée ici sur les 8 d'`index.md` — Kahneman, Weick et Edmondson ajoutés, Naturalistic Decision Making et Predictive Processing (Clark/Friston) retirés (non repris ailleurs dans le corpus, non développés en section détaillée sur cette page).
 
 | Fondement Scientifique | Niveau de Certitude | Métrique / Zone Cible | Opérationnalisation Technique |
 | :--- | :---: | :--- | :--- |
-| Charge Cognitive (Sweller) | Niveau 1 : Irréfutable | Zone de Flow : 40% - 65% | `CapacityAgent` / CLI Engine |
-| Variété Requise (Ashby) | Niveau 1 : Irréfutable | Modélisation multi-agents | Topologie du Registre R2 / Blackboard |
-| Double Loop (Argyris & Schön) | Niveau 1 : Irréfutable | Profondeur d'apprentissage | `RetroAgent` / Standard Référentiel ADR-011 |
-| Cadre Cynefin (Snowden) | Niveau 2 : Robuste | Routage de complexité | `FlowDispatcher` / `CynefinRouter` |
-| Systèmes Adaptatifs Complexes (CAS) | Niveau 2 : Robuste | Comportement émergent du train | Architecture globale (ADR-012) |
-| Naturalistic Decision Making (NDM) | Niveau 2 : Robuste | Format de recommandation | Format RPD (Standard ADR-006) |
-| Predictive Processing (Clark / Friston) | Niveau 3 : Expérimental | Détection anticipée des signaux | `EarlyWarningEngine` / `WeakSignalDetector` P3 |
+| Charge Cognitive (Sweller) | Niveau 1 : ÉTABLI | Zone de Flow : 40% - 65% | `CapacityAgent` / CLI Engine |
+| Dual Process (Kahneman) | Niveau 1 : ÉTABLI | Distinction Système 1 / Système 2 | Routage R1 (rapide/algorithmique) vs R2 (lent/agentique) |
+| Variété Requise (Ashby) | Niveau 1 : ÉTABLI | Modélisation multi-agents | Registre R2 / graphe LangGraph |
+| Double Loop (Argyris & Schön) | Niveau 1 : ÉTABLI | Profondeur d'apprentissage | `RetroAgent` / Standard Référentiel ADR-011 |
+| Cadre Cynefin (Snowden) | Niveau 2 : PROBABLE | Routage de complexité | `flow_dispatcher_node` / `cynefin_router.py` |
+| Haute Fiabilité Organisationnelle (Weick) | Niveau 2 : PROBABLE | Vigilance collective | Principe directeur, sans checklist HRO câblée dans le code (cf. `04-gouvernance-ethique/decisions-index.md`, ADR-008) |
+| Systèmes Adaptatifs Complexes (Holland) | Niveau 2 : PROBABLE | Comportement émergent du train | Architecture globale (ADR-012) |
+| Sécurité Psychologique (Edmondson) | Niveau 2 : PROBABLE | Climat d'équipe | Principe directeur, sans métrique calculée dans le code |
 
 ---
 
-> Pour la Sûreté Organisationnelle (ADR-001) : Le niveau de certitude scientifique ne dicte pas la valeur d'une règle, mais définit le degré d'autonomie accordé à l'agent qui la déploie. Un fondement validé Niveau 1 autorise des mécanismes d'alerte automatisés et des interrupteurs de flux (ex: `interrupt()` en cas de non-conformité majeure du PI Readiness), tandis qu'un fondement Niveau 2 ou Niveau 3 impose une validation humaine systématique et stricte (Human-In-The-Loop).
+> Pour la Sûreté Organisationnelle (ADR-001) : le niveau de certitude scientifique ne dicte pas la valeur d'une règle, mais définit le degré d'autonomie accordé à l'agent qui la déploie. *Correction* : le graphe compilé n'expose pas de primitive `interrupt()` — le mécanisme réel est un routage conditionnel vers `human_review` avec `interrupt_before=["human_review"]` (`graph.py:1289`), cf. `04-gouvernance-ethique/decisions-index.md`.

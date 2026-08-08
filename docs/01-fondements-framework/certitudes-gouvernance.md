@@ -21,7 +21,7 @@ Le framework évalue ses fondements théoriques selon trois index stricts. Ce po
 
 ### 🟢 NIVEAU 1 : ÉTABLI (Contexte individuel / Extrapolé au collectif) 
  * **Définition :** Principes académiques solidement éprouvés à l'échelle individuelle (sciences cognitives, neurosciences), dont l'application à un collectif constitue une extrapolation structurante pour le framework
-* **Gouvernance :** **Autonomie Haute.** Le système est autorisé à déclencher des alertes automatisées, des notifications directes et des interrupteurs de flux (ex: blocages de processus ou fonctions `interrupt()`).
+* **Gouvernance :** **Autonomie Haute.** Le système est autorisé à déclencher des alertes automatisées, des notifications directes et un routage conditionnel de blocage (*correction : le mécanisme réel est `interrupt_before=["human_review"]`, pas un appel direct à une fonction `interrupt()` — cf. `04-gouvernance-ethique/decisions-index.md`, ADR-026*).
 * **Exemples phares :**
   * Théorie de la Charge Cognitive (Sweller) : Calibration de la zone de flow entre 40% et 65%.
   * Loi de la Variété Requise (Ashby) : Analogie conceptuelle pour guider la distribution et la granularité multi-agents.
@@ -76,7 +76,7 @@ graph TD
 ```
 
 * **Le Registre R1 - Déterministe (L'Algorithme) :** C'est le sanctuaire mathématique du système (briques `flow_metrics_engine.py`, `quality_guard.py`). Il audite la qualité des données (INVEST, DoR/DoD) et certifie les mesures. **Zéro LLM, zéro hallucination.**
-* **Le Registre R2 - Agentique (L'IA) :** C'est le réseau de neurones organisationnel (8 agents pilotés par l'architecture Blackboard). Les agents interprètent la complexité, croisent les patterns et émettent des recommandations, mais ils ont l'interdiction structurelle de falsifier ou réécrire les faits bruts issus de R1.
+* **Le Registre R2 - Agentique (L'IA) :** plusieurs agents spécialisés, nœuds d'un graphe LangGraph à routage explicite (registre complet : `02-moteur-architecture/Registres.mdx`). Les agents interprètent la complexité, croisent les patterns et émettent des recommandations, mais ils ont l'interdiction structurelle de falsifier ou réécrire les faits bruts issus de R1 — invariant vérifié (ADR-021).
 
 ---
 
@@ -87,7 +87,7 @@ L'ADR-001 (Architecture Decision Record) grave dans le marbre le contrat de conf
 > ⚖️ **Principe de Sûreté Organisationnelle :**
 > L'IA suggère, l'algorithme prouve, l'humain décide.
 >
-> Un agent basé sur un fondement scientifique de niveau 🟢 dispose d'un droit d'interruption automatique du flux opérationnel (ex: `interrupt()` déclenché par `PIReadinessEngine` en cas de non-conformité fatale du backlog à J-15). Un agent opérant sur un fondement 🟡 ou 🔴 est structurellement bridé et doit soumettre ses analyses sous forme de recommandations soumises à arbitrage humain permanent.
+> Un agent basé sur un fondement scientifique de niveau 🟢 dispose d'un droit d'interruption automatique du flux opérationnel (*mécanisme réel : routage conditionnel vers `human_review` avec `interrupt_before=["human_review"]`, seuil 60 % sur le score DoR calculé par `PIReadinessEngine`*). Un agent opérant sur un fondement 🟡 ou 🔴 est structurellement bridé et doit soumettre ses analyses sous forme de recommandations soumises à arbitrage humain permanent.
 
 ---
 
@@ -118,5 +118,5 @@ En croisant la certitude théorique avec l'état de fraîcheur des données brut
 En alignement avec les pratiques des Organisations à Haute Fiabilité (HRO), Neuro-Scale documente ses propres limites opérationnelles :  
 
 * **Dépendance à la culture de saisie :** Si le Data Quality Score de la Phase 2 bloque durablement l'activation de R2, le système reste un simple outil d'audit de données sans valeur prédictive.  
-* **Coût d'un faux positif interrupt() :** Un déclenchement erroné d'interruption du flux à J-7 d'un PI Planning peut générer une friction organisationnelle majeure. Le bouton de bypass humain reste prioritaire en toutes circonstances (ADR-001)[cite: 1, 3].
+* **Coût d'un faux positif d'interruption :** Un déclenchement erroné du routage vers `human_review` peut générer une friction organisationnelle majeure. Le bouton de bypass humain reste prioritaire en toutes circonstances (*correction : le sujet relève de l'ADR-026, pas de l'ADR-001 — Two-Layer Pattern, sans rapport avec ce mécanisme*).
 * **Risque de ré-identification :** Bien que l'anonymisation soit opérée à l'échelle de l'équipe, la taille réduite de certains collectifs (5-7 personnes) impose une vigilance stricte quant à l'analyse des métriques pour rester en parfaite conformité avec le droit du travail et les instances représentatives (CSE). 

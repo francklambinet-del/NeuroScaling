@@ -19,7 +19,7 @@ Ce document formalise les règles d'éthique et de gouvernance logicielle du fra
 
 La règle absolue du framework est l'étanchéité totale vis-à-vis des données individuelles. NeuroScaling applique une politique de restriction stricte au niveau de ses capteurs de données (Registre R1) :
 
-* **Zéro métrique individuelle :** Le système ne calcule, ne stocke et ne projette aucun indicateur nominatif. Les notions de performance individuelle, de classement de développeurs ou de traque d'activité personnelle sont absentes du code source.
+* **Zéro métrique individuelle :** Le système ne calcule, ne stocke et ne projette aucun indicateur nominatif. Les notions de performance individuelle, de classement de développeurs ou de traque d'activité personnelle sont absentes du code source — **vérifié** (INV-09). Réserve : cette conformité tient par **absence de champ** dans les modèles de données, pas par un garde-fou actif qui bloquerait une tentative d'ajout (cf. `04-gouvernance-ethique/decisions-index.md`, ADR-004).
 * **Agrégation au niveau de l'Équipe :** Le flux de travail, la charge cognitive (Loi de Sweller) et la vélocité sont mesurés exclusivement à l'échelle collective de l'équipe (Scrum Team) ou du train (ART).
 * **Anonymisation des signaux faibles :** Lorsque l'agent `CapacityAgent` détecte un risque de surchauffe ou de saturation, l'alerte émise signale un épuisement de la capacité de l'équipe induit par des frictions de processus (ex: *context-switching* ou *Shadow Backlog*), sans jamais pointer de responsabilité individuelle.
 
@@ -41,7 +41,7 @@ Pour bâtir un environnement de haute fiabilité (HRO), les utilisateurs doivent
 
 NeuroScaling affiche de manière transparente la marge d'erreur ou le niveau de fiabilité scientifique de ses analyses à travers trois badges de confiance explicites :
 
-1. **CALCULÉ (Indice de Haute Fidélité) :** Activé uniquement lorsque les données brutes fournies par R1 sont complètes et conformes à 100%, et que le fondement théorique sous-jacent est de niveau Vert (Irréfutable, comme la Loi de Sweller).
+1. **CALCULÉ (Indice de Haute Fidélité) :** Activé uniquement lorsque les données brutes fournies par R1 sont complètes et conformes à 100%, et que le fondement théorique sous-jacent est de niveau Vert (ÉTABLI, comme la Loi de Sweller) — *correction de vocabulaire : le code n'admet que CALCULÉ/PROBABLE/NON VÉRIFIÉ, jamais "Irréfutable"*.
 2. **PROBABLE (Marge d'Erreur Signalée) :** Déclenché si les données d'entrée présentent des légères lacunes ou si le diagnostic s'appuie sur une théorie d'organisation de niveau Jaune (Robuste, nécessitant une validation contextuelle par l'humain).
 3. **NON VÉRIFIÉ (Sécurité Systémique) :** Émis dès que le score d'intégrité du `Quality Guard` s'effondre (données Jira corrompues, incohérences majeures). Dans ce mode, **le système verrouille le Registre R2** et refuse de générer des recommandations pour empêcher toute prise de décision basée sur des hallucinations ou du bruit informationnel.
 

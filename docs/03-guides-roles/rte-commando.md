@@ -37,16 +37,16 @@ Le `CapacityAgent` applique les seuils de la **loi de Sweller**. Si le *Work In 
 ---
 
 ## Mode Commando : Le Protocole PI Readiness (J-15)
-À J-15 avant le PI Planning, le système bascule automatiquement dans une configuration de haute vigilance appelée **Mode Commando**. Le moteur `PIReadinessEngine` (Registre R1) s'interface avec le `PredictiveEngine` (Registre R2) et déploie le *Dual-Graph* (ADR-025) pour traquer les risques de non-préparation.
+La fenêtre J-15 avant le PI Planning est la référence du moteur `PIReadinessEngine` (Registre R1) — *correction : aucun déclenchement automatique et daté n'a été trouvé dans le code (cf. `03-guides-roles/rte-pi-readiness.md`) ; l'activation d'une vigilance renforcée reste un choix opérationnel du RTE*. Le moteur s'interface avec `PredictiveEngineAgent` (Registre R2, *correction de nom*) et le graphe LangGraph (*correction : le Dual-Graph est l'ADR-019, pas l'ADR-025 — cf. `04-gouvernance-ethique/decisions-index.md`*) pour traquer les risques de non-préparation.
 
 ### Audit de Maturité du Backlog (DoR)
-Le système scanne la *Definition of Ready* (DoR) de chaque Feature candidate au PI à venir :
+Le système scanne la *Definition of Ready* (DoR) de chaque Feature candidate au PI à venir. Les 3 statuts (`CALCULÉ`/`PROBABLE`/`NON VÉRIFIÉ`) sont réels — *correction d'attribution : assignés par `diagnostic_orchestrator.py` (règles de corrélation pures), pas par `PIReadinessEngine`* :
 * **Statut `CALCULÉ` :** Feature estimée (Story Points), Stories enfants liées, critères d'acceptation complets et DoR respectée à 100%.
 * **Statut `PROBABLE` :** Estimation macro effectuée, mais dépendances externes ou fournisseurs non confirmées.
 * **Statut `NON VÉRIFIÉ` :** Alerte critique. La Feature est instable et risque de polluer les sessions de planification.
 
 ### Les 3 Alertes de Rupture (Format RPD - ADR-006)
-Les alertes envoyées au RTE suivent strictement le format de décision *Naturalistic Decision Making* (NDM) validé par l'ADR-006 :
+Les alertes envoyées au RTE suivent le format **RPD (Recommandation / Preuve / Diagnostic)** validé par l'ADR-006 — *correction : pas la structure Naturalistic Decision Making (NDM), une inspiration conceptuelle distincte* :
 
 #### A. Alerte de Saturation Cognitive (`CapacityAgent`)
 * **R (Recommandation) :** Reporter la Feature `[ID]` à l'itération suivante ou geler le périmètre de l'Équipe Delta.
@@ -56,7 +56,7 @@ Les alertes envoyées au RTE suivent strictement le format de décision *Natural
 #### B. Alerte de Gridlock Topologique (`DependencyAgent`)
 * **R (Recommandation) :** Convoquer un arbitrage d'urgence entre l'Équipe Alpha (Stream-Aligned) et l'Équipe Sigma (Complicated-Subsystem).
 * **P (Preuve R1) :** Présence d'une chaîne de dépendance linéaire de 4 niveaux bloquée par un ticket non estimé chez le fournisseur.
-* **D (Diagnostic R2) :** L'agent identifie un goulot d'étranglement de type "Ticket Otage" : si la livraison du fournisseur glisse de 3 jours, 40% de la valeur globale du PI est compromise.
+* **D (Diagnostic R2) :** L'agent identifie un goulot d'étranglement de type "Ticket Otage" (`compute_sp_hostage`) : le seuil de blocage systémique documenté par deux sources indépendantes du corpus est **20 % de la capacité de sprint** (*correction : pas 40 %, chiffre sans source dans une version précédente*).
 
 #### C. Alerte de Dérive de Valeur (`ValueArbitrator`)
 * **R (Recommandation) :** Dé-prioriser ou diviser la Feature `[ID]` au profit de la Feature `[ID-2]`.
@@ -65,19 +65,17 @@ Les alertes envoyées au RTE suivent strictement le format de décision *Natural
 
 ---
 
-## Le Cran de Sûreté : L'Interruption Bloquante `interrupt()`
-Conformément aux directives de gouvernance de l'ADR-001, *NeuroScaling* dispose d'un mécanisme de protection logicielle strict.
+## Le Cran de Sûreté : Routage Conditionnel vers `human_review`
+*Correction* : ce mécanisme relève de l'ADR-026, pas de l'ADR-001 (Two-Layer Pattern, sans rapport). Le seuil est réel et exact : `PI_READINESS_RISK_THRESHOLD = 0.60` (`pi_readiness_engine.py:52`) et `graph.py:396` (`dor_score < 60.0` → `human_review`) — une régression historique à 40.0 a été corrigée et vérifiée indépendamment (`AUDIT-007`).
 
-Si l'indice de préparation global du train calculé par le `PIReadinessEngine` tombe **en dessous de 60% à J-7** de l'événement, le système engage un protocole de mise en sécurité assistée via la fonction interrupt(), suspendant les automatismes au profit d'un arbitrage humain prioritaire pour traiter les alertes fatales ou forcer la trajectoire..
+Si l'indice de préparation du train calculé par le `PIReadinessEngine` tombe **en dessous de 60%**, le graphe route vers `human_review`, avec `interrupt_before=["human_review"]` (`graph.py:1289`) — *correction : pas un appel direct à une fonction `interrupt()`. Le seul `interrupt()` du dépôt est dans un module orphelin jamais importé (`agents/rituals/pi_readiness_graph.py:118`)* — suspendant les automatismes au profit d'un arbitrage humain prioritaire.
 
-**Conséquences pour l'Organisation :**
-1.  Le rapport de synthèse automatisé destiné au Management ne peut pas être généré par le système.
-2.  Le framework exige une résolution immédiate des "Alertes Fatales" ou un forçage manuel authentifié (*Audit d'Exception*) par le RTE pour valider que le risque technique est formellement accepté par l'humain.
+**Conséquence pour l'Organisation :** le graphe s'arrête avant `human_review`, en attente d'une action du RTE. *Retiré, non confirmé* : un verrouillage automatique de la génération de rapport et un forçage manuel tracé (« Audit d'Exception ») figuraient ici — aucun des deux mécanismes n'a de référent trouvé dans le code (cf. `03-guides-roles/rte-pi-readiness.md`).
 
 ---
 
-## Checklist de Sortie (Haute Fiabilité - HRO)
-Avant de clore la phase de préparation et d'autoriser l'ouverture du PI Planning, le RTE doit valider manuellement la checklist de robustesse suivante via le `MentorAgent` :
+## Checklist de Sortie
+Avant de clore la phase de préparation et d'autoriser l'ouverture du PI Planning, le RTE peut s'appuyer sur les signaux R1 suivants — *correction : aucune checklist HRO ni référence à ce sigle n'a été trouvée dans `mentor_agent.py` ; retiré comme mécanisme géré par le `MentorAgent`* :
 
 - [ ] **Prédictibilité :** La vélocité historique certifiée par R1 couvre-t-elle à 100% la charge du plan proposé ?
 - [ ] **Anti-fragilité (Buffer) :** Un tampon de capacité de minimum 15% a-t-il été préservé sur les équipes identifiées comme "Goulots" ?

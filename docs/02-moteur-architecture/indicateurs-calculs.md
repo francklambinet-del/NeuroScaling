@@ -7,407 +7,249 @@ slug: /indicateurs-calculs
 
 # Référentiel des Indicateurs & Formules Mathématiques
 
-Ce document constitue la source unique de vérité (*Single Source of Truth*) pour l'ensemble des métriques calculées de manière déterministe par le Registre R1 (couche `engine/`). Ces indicateurs qualifient la santé de vos flux de livraison, l'alignement stratégique et la charge cognitive des équipes — avant toute interprétation sémantique par les agents du Registre R2.
+Ce document est une **transcription du catalogue réel** implémenté par `engine/signals/pattern_detector.py` (Registre R1). Le code est la source de vérité ; ce fichier en est une lecture, régénérée manuellement le **2026-08-02** après audit (`AUDIT-01 §9`, `AUDIT-01 §1.2`, `AUDIT-03 §145`, `AUDIT-04`). Une version précédente de ce document décrivait 28 patterns sans aucune correspondance avec le code — voir `CHANGELOG-LOT1-02.md` pour l'historique de cette divergence.
 
 ---
 
 ## 🔬 Philosophie de la Mesure en R1
 
-Conformément aux principes de Neuro-Scale V4, l'intégralité des calculs repose sur des données factuelles issues des API de vos outils de gestion (Jira) et d'ingénierie (GitHub).
+Conformément aux principes de Neuro-Scale V4, l'intégralité des calculs repose sur des données factuelles issues de Jira (`adapters/atlassian/`) et, pour le contexte documentaire, de Confluence (`engine/context/rag_confluence.py`).
 
-* **Zéro Biais :** Aucun modèle probabiliste ou LLM n'intervient dans cette couche.
-* **Consommation asymétrique :** Les seuils franchis alimentent automatiquement le Blackboard sémantique pour déclencher les rituels et alertes des agents R2.
+* **Zéro Biais (avec exception connue) :** aucun modèle probabiliste ou LLM n'intervient dans `pattern_detector.py`. Une exception existe ailleurs dans le même module `engine/signals/` : `early_warning_engine.py` appelle un LLM par défaut (`use_llm=True`) — écart documenté sous `DRIFT-001`, arbitrage en attente.
+* **Consommation du résultat :** aucune écriture automatique de `pattern_detector.py` vers l'`OntologyGraph` (Blackboard R2) n'a été trouvée dans le code (grep = 0 occurrence de `OntologyGraph`/`publish_agent_observation`). Le déclenchement des rituels et alertes R2 à partir d'un pattern franchi n'est pas câblé à ce niveau — ne pas l'affirmer tant que ce n'est pas vérifié ailleurs.
 
 ---
 
 ## 📊 Cartographie des Patterns de Blocage Systémiques
 
-Voici le catalogue officiel des **28 patterns** détectés par le moteur `PatternDetector` (Registre R1), classés par niveau de criticité, avec leurs algorithmes de déclenchement et les actions correctives immédiates associées.
+Catalogue réel des **15 patterns** détectés par `PatternDetector` (`engine/signals/pattern_detector.py`), constantes de seuils dans `THRESHOLDS` (lignes 78-94 du même fichier). La classification à trois niveaux (NORMAL / AVERTISSEMENT / CRITIQUE) est réelle — produite par la fonction `severity()` (`pattern_detector.py:97-109`), pas une invention documentaire.
 
-### Vue d'ensemble par criticité
+> **Note sur le nombre 27/28** : le docstring de `pattern_detector.py` (ligne 3) affirme lui-même « détection déterministe des 27 patterns pathologiques SAFe », alors que 15 fonctions `detect_P0X` existent réellement (vérifié : aucun `P16` à `P29` trouvé dans le fichier). Cette affirmation erronée est dans le code, pas seulement dans la documentation — elle explique la contradiction C-08 avec `Registres.mdx` (« 27 patterns »). Ce chantier ne touche pas au code ; le correctif du docstring est hors périmètre de ce lot.
 
-| # | Pattern | Type de problème | Criticité |
-| :-- | :--- | :--- | :--- |
-| 01 | Effondrement Vélocité | Performance équipe | 🔴 Critique |
-| 02 | Sous-livraison Chronique | Prédictibilité | 🔴 Critique |
-| 03 | Saturation WIP Critique | Flux / WIP | 🔴 Critique |
-| 04 | Pic Injection Défauts | Qualité | 🔴 Critique |
-| 05 | Blocage Delivery Pipeline | CI/CD | 🔴 Critique |
-| 06 | Spirale Qualité | Qualité / Dette | 🔴 Critique |
-| 07 | Déraillement Feature | Delivery Feature | 🔴 Critique |
-| 08 | Paralysie Décisionnelle | Gouvernance | 🔴 Critique |
-| 25 | Désalignement Stratégique | Stratégie | 🔴 Critique |
-| 27 | Budgétisation Rigide | Lean Budget | 🔴 Critique |
-| 09 | Érosion Prédictibilité | Prédictibilité | 🟡 Haute |
-| 10 | Explosion Dette Tech | Dette technique | 🟡 Haute |
-| 11 | Défaillance Qualité | Qualité | 🟡 Haute |
-| 12 | Goulot Livraison | Flow / Delivery | 🟡 Haute |
-| 13 | Surcharge Composant | Architecture | 🟡 Haute |
-| 14 | Instabilité Équipe | Performance | 🟡 Haute |
-| 15 | Explosion Scope | Scope | 🟡 Haute |
-| 16 | Gridlock Dépendances | Dépendances | 🟡 Haute |
-| 24 | Zombie Epics | Portfolio | 🟡 Haute |
-| 26 | Surcharge de la Solution | Large Solution | 🟡 Haute |
-| 17 | Dérive Innovation | Innovation | 🟢 Moyenne |
-| 18 | Explosion Lead Time | Delivery Feature | 🟢 Moyenne |
-| 19 | Déséquilibre Portfolio | Portfolio | 🟢 Moyenne |
-| 20 | Faible ROI Features | Business Value | 🟢 Moyenne |
-| 21 | Fragmentation Efforts | Flux / Focus | 🟢 Moyenne |
-| 22 | Dérive Architecturale | Tech | 🟢 Moyenne |
-| 23 | Inefficience Flow | Flow / Process | 🟢 Moyenne |
-| 28 | Inertie du Feedback Loop | Gouvernance | 🟢 Moyenne |
+### Vue d'ensemble
 
-> **Note de sûreté :** le franchissement d'un seuil 🔴 Critique génère un blocage immédiat au niveau de la Gate d'entrée R2, ou l'ouverture instantanée d'une gouvernance HITL (*Human-In-The-Loop*).
+| ID | Nom réel | Entrée consommée | Seuil `warn` | Seuil `crit` | Ligne |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| P01 | Carry-over Systématique | `sprint`, `status` | 30 % | 50 % | 195 |
+| P02 | Expansion de Périmètre Invisible (Scope Creep) | `created_at` vs début de PI | 20 % | 35 % | 245 |
+| P03 | Déséquilibre Feature / Enabler | `story_points`, `type`, `feature_link` | 80 % business | 90 % business | 277 |
+| P04 | Engorgement du Ready (Backlog Non Raffiné) | `acceptance_criteria`, `story_points` | 25 % | 40 % | 312 |
+| P05 | Dark Work (Travail Hors-Train) | `feature_link` | 15 % | 25 % | 342 |
+| P06 | Effet Tunnel de Recette (Late Testing) | `type`, `status`, `stale_days` | 30 % | 50 % | 368 |
+| P07 | Fragmentation des Équipes (Silos de Compétences) | `team`, `assignee` | 70 % | 90 % | 410 |
+| P08 | Blocage par Dépendances Externes | `links.blocked_by`, appartenance équipe ART | 5 (compte) | 10 (compte) | 452 |
+| P09 | Instabilité du Focus (Context Switching) | `assignee`, `feature_link`, `status` | 3 features/pers. | 5 features/pers. | 489 |
+| P10 | Waterfall de Statuts (Workflow Trop Complexe) | `status` (valeurs distinctes) | 8 étapes | 12 étapes | 532 |
+| P11 | Syndrome Big Bang de Clôture | `updated_at` des tickets Done vs fin de PI | 20 % | 35 % | 558 |
+| P12 | Sous-estimation Chronique | `story_points` planifiés vs réalisés | -20 % delta | -35 % delta | 598 |
+| P13 | Inactivité des Tickets (Stale Issues) | jours dans le statut, `status` | 3 (compte) | 7 (compte) | 625 |
+| P14 | Absence de Hiérarchie SAFe | `feature_link`, `type`, `pi` des Features | 10 % | 20 % | 657 |
+| P15 | Reopening Fréquent | champ `reopened` | 5 % | 10 % | 691 |
+
+**Seuils codés en dur (`THRESHOLDS`, `pattern_detector.py:78-94`)** : le commentaire du code (l.75) les qualifie de « configurables par ART », ce qui est faux — ce sont des constantes de module, non paramétrables sans modifier le fichier (`AUDIT-03 §145`, `DRIFT-005`). Ne pas reprendre l'idée de configurabilité. Deux patterns (P06, P11) ont leurs seuils inline dans la fonction plutôt que dans `THRESHOLDS` — même valeur numérique, mais source différente dans le code, notée pour la prochaine vérification.
 
 ---
 
-### 🔴 Patterns Critiques (Priorité 1)
+### P01 — Carry-over Systématique
 
-#### 01 — Effondrement Vélocité
-
-* **Type de problème :** Performance équipe
-* **Explication simple :** la vélocité de l'équipe s'effondre brutalement.
-* **Seuil de déclenchement :**
-
-```math
-\text{Moyenne (2 derniers sprints)} < 50\% \text{ de la Baseline}
-```
-
-* **Action rapide :** réduire drastiquement le WIP, identifier immédiatement les points de blocage.
+* **Fonction :** `detect_P01_carryover` — `engine/signals/pattern_detector.py:195`
+* **Donnée consommée :** tickets groupés par `sprint`, comptage des statuts `Done`
+* **Condition de déclenchement :** pour le sprint le plus dégradé, `(total - done) / total × 100` comparé aux seuils
+* **Seuils :** `warn = 30 %` · `crit = 50 %`
+* **Action associée :** « Revoir la capacité de sprint — stories trop volumineuses ou dépendances non résolues avant sprint »
 
 ---
 
-#### 02 — Sous-livraison Chronique
+### P02 — Expansion de Périmètre Invisible (Scope Creep)
 
-* **Type de problème :** Prédictibilité
-* **Explication simple :** l'équipe livre systématiquement moins que ses engagements.
-* **Seuil de déclenchement :**
-
-```math
-\text{Taux de prédictibilité} < 70\% \text{ mesuré sur 3 sprints consécutifs}
-```
-
-* **Action rapide :** réduire le périmètre (scope), recalibrer la capacité nominale de l'équipe.
+* **Fonction :** `detect_P02_scope_creep` — `engine/signals/pattern_detector.py:245`
+* **Donnée consommée :** `created_at` des tickets comparé à la date de début de PI
+* **Condition de déclenchement :** part des tickets créés après le début du PI, en %
+* **Seuils :** `warn = 20 %` · `crit = 35 %`
+* **Action associée :** « Geler le périmètre PI après PI Planning — toute entrée post-planning passe par un arbitrage RTE »
 
 ---
 
-#### 03 — Saturation WIP Critique
+### P03 — Déséquilibre Feature / Enabler
 
-* **Type de problème :** Flux / WIP
-* **Explication simple :** un nombre excessivement élevé de tickets sont ouverts en parallèle.
-* **Seuil de déclenchement :**
-
-```math
-\text{WIP} > 3 \times \text{Vélocité} \quad \text{ET} \quad \text{Croissance du WIP} > 50\%
-```
-
-* **Action rapide :** stopper immédiatement l'entrée de nouveaux tickets, focus absolu sur la fermeture de l'existant.
+* **Fonction :** `detect_P03_feature_enabler` — `engine/signals/pattern_detector.py:277`
+* **Donnée consommée :** `story_points` par `type` (Story avec `feature_link` vs Technical Story/Task/Spike)
+* **Condition de déclenchement :** part des points business dans le total (business + enabler), en %
+* **Seuils :** `warn = 80 % business` · `crit = 90 % business`
+* **Action associée :** « Allouer 20-30% de la capacité aux Enablers techniques — dette technique = charge cognitive future »
 
 ---
 
-#### 04 — Pic Injection Défauts
+### P04 — Engorgement du Ready (Backlog Non Raffiné)
 
-* **Type de problème :** Qualité
-* **Explication simple :** augmentation soudaine et anormale de l'apparition de bugs.
-* **Seuil de déclenchement :**
-
-```math
-\text{Nombre de défauts créés} > 200\% \text{ de la Baseline}
-```
-
-* **Action rapide :** lancer un audit qualité flash, marquer une pause sur les nouveaux développements.
+* **Fonction :** `detect_P04_ready_backlog` — `engine/signals/pattern_detector.py:312`
+* **Donnée consommée :** tickets actifs sans `acceptance_criteria` ou sans `story_points`
+* **Condition de déclenchement :** part des tickets actifs non prêts, en %
+* **Seuils :** `warn = 25 %` · `crit = 40 %`
+* **Action associée :** « Activer BacklogAgent pour génération AC automatique — viser DoR > 80% avant sprint »
 
 ---
 
-#### 05 — Blocage Delivery Pipeline
+### P05 — Dark Work (Travail Hors-Train)
 
-* **Type de problème :** CI/CD
-* **Explication simple :** le pipeline de livraison est ralenti ou totalement bloqué.
-* **Seuil de déclenchement :**
-
-```math
-\text{P90 Cycle Time} > 300\% \text{ de la Baseline}
-```
-
-* **Action rapide :** intervenir sur le pipeline, analyser les principaux goulots d'étranglement techniques.
+* **Fonction :** `detect_P05_dark_work` — `engine/signals/pattern_detector.py:342`
+* **Donnée consommée :** présence du champ `feature_link` sur chaque ticket
+* **Condition de déclenchement :** part des tickets sans `feature_link`, en %
+* **Seuils :** `warn = 15 %` · `crit = 25 %`
+* **Action associée :** « Tout ticket créé doit pointer vers une Feature PI — créer Feature 'Enabler Technique' pour le dark work légitime »
 
 ---
 
-#### 06 — Spirale Qualité
+### P06 — Effet Tunnel de Recette (Late Testing)
 
-* **Type de problème :** Qualité / Dette
-* **Explication simple :** la dette technique et l'injection de défauts explosent simultanément.
-* **Seuil de déclenchement :**
-
-```math
-\text{Taux de corrélation} > 70\% \text{ avec une tendance positive confirmée}
-```
-
-* **Action rapide :** planifier immédiatement un sprint de nettoyage dédié à la résorption de la dette.
+* **Fonction :** `detect_P06_late_testing` — `engine/signals/pattern_detector.py:368`
+* **Donnée consommée :** tickets de `type == "test"`, `status` ∈ (In Testing, In QA, Blocked), `stale_days`
+* **Condition de déclenchement :** part des tickets de test bloqués/en attente depuis plus de 5 jours, en %. Si aucun ticket de type `test` n'existe, le pattern retourne `NORMAL` par défaut (donnée insuffisante).
+* **Seuils :** `warn = 30 %` · `crit = 50 %` (valeurs inline dans la fonction, pas dans `THRESHOLDS`)
+* **Action associée :** « Intégrer les tests en continu (shift-left) — objectif: 0 test en QA les 2 derniers jours »
 
 ---
 
-#### 07 — Déraillement Feature
+### P07 — Fragmentation des Équipes (Silos de Compétences)
 
-* **Type de problème :** Delivery Feature
-* **Explication simple :** le temps de traversée d'une fonctionnalité est anormalement supérieur aux estimations.
-* **Seuil de déclenchement :**
-
-```math
-\text{Lead Time actuel} > 500\% \text{ de l'estimation initiale}
-```
-
-* **Action rapide :** procéder à un découpage d'urgence de la Feature, escalader le blocage rapidement.
+* **Fonction :** `detect_P07_silo` — `engine/signals/pattern_detector.py:410`
+* **Donnée consommée :** répartition des tickets par `assignee` au sein de chaque `team`
+* **Condition de déclenchement :** une équipe est « silotée » si un seul assignee concentre ≥ 70 % de ses tickets ; le pattern mesure la part d'équipes silotées sur le total, en %
+* **Seuils :** `warn = 70 %` · `crit = 90 %`
+* **Action associée :** « Organiser pair-programming inter-équipes — Team Topologies: activer mode Collaboration temporaire »
 
 ---
 
-#### 08 — Paralysie Décisionnelle
+### P08 — Blocage par Dépendances Externes
 
-* **Type de problème :** Gouvernance
-* **Explication simple :** trop de fonctionnalités restent bloquées en attente d'arbitrage.
-* **Seuil de déclenchement :**
-
-```math
-> 30\% \text{ des Features en statut "Waiting"} > 10 \text{ jours}
-```
-
-* **Action rapide :** escalader le problème aux instances décisionnelles du Train ou du Portfolio.
+* **Fonction :** `detect_P08_ext_dependency` — `engine/signals/pattern_detector.py:452`
+* **Donnée consommée :** `links.blocked_by`, appartenance des tickets bloquants aux équipes de l'ART
+* **Condition de déclenchement :** nombre de tickets bloqués par un ticket dont l'équipe n'appartient pas à l'ART
+* **Seuils :** `warn = 5 (compte)` · `crit = 10 (compte)`
+* **Action associée :** « Cartographier les dépendances hors-ART dès J-15 PI Planning — DependencyAgent alerte proactive »
 
 ---
 
-#### 25 — Désalignement Stratégique
+### P09 — Instabilité du Focus (Context Switching)
 
-* **Type de problème :** Stratégie
-* **Explication simple :** l'exécution opérationnelle des trains (ART) dévie des thèmes stratégiques de l'entreprise.
-* **Déclencheur :** rupture de correspondance constatée entre les Epics du Backlog et les Strategic Themes.
-* **Action rapide :** convoquer une revue du Portfolio Kanban, re-prioriser le flux via le calcul du WSJF.
-
----
-
-#### 27 — Budgétisation Rigide
-
-* **Type de problème :** Lean Budget
-* **Explication simple :** incapacité systémique à réallouer des financements entre les trains malgré les évolutions du marché.
-* **Déclencheur :** verrouillage budgétaire fixe inter-flux sans ajustement dynamique.
-* **Action rapide :** basculer le mode de gestion financière vers le Participatory Budgeting.
+* **Fonction :** `detect_P09_context_switch` — `engine/signals/pattern_detector.py:489`
+* **Donnée consommée :** `assignee`, `feature_link` des tickets non `Done`
+* **Condition de déclenchement :** moyenne du nombre de Features actives distinctes par personne
+* **Seuils :** `warn = 3 features/personne` · `crit = 5 features/personne`
+* **Action associée :** « Limiter à 2 Features actives / personne — CLI Engine: [nombre de personnes en surcharge, calculé dynamiquement] »
 
 ---
 
-### 🟡 Patterns à Haute Criticité (Priorité 2)
+### P10 — Waterfall de Statuts (Workflow Trop Complexe)
 
-#### 09 — Érosion Prédictibilité
-
-* **Type de problème :** Prédictibilité
-* **Seuil de déclenchement :**
-
-```math
-\Delta > 15\% \text{ de variation sur 2 sprints consécutifs}
-```
-
-* **Action rapide :** analyse des causes racines (*root cause*) et ajustements de capacité.
+* **Fonction :** `detect_P10_waterfall` — `engine/signals/pattern_detector.py:532`
+* **Donnée consommée :** ensemble des valeurs distinctes du champ `status` sur tous les tickets
+* **Condition de déclenchement :** nombre de statuts uniques utilisés (proxy documenté dans le code — ne mesure pas directement la complexité du workflow Jira)
+* **Seuils :** `warn = 8 étapes` · `crit = 12 étapes`
+* **Action associée :** « Simplifier le workflow Jira — cible: 5 statuts maximum (To Do / In Progress / In Review / Done / Blocked) »
 
 ---
 
-#### 10 — Explosion Dette Tech
+### P11 — Syndrome Big Bang de Clôture
 
-* **Type de problème :** Dette technique
-* **Seuil de déclenchement :**
-
-```math
-\text{Ratio de dette} > 40\% \quad \text{ou augmentation nette} > 15\%
-```
-
-* **Action rapide :** restreindre temporairement le périmètre fonctionnel (scope), rembourser la dette.
+* **Fonction :** `detect_P11_big_bang` — `engine/signals/pattern_detector.py:558`
+* **Donnée consommée :** `updated_at` des tickets `Done`, comparé à la date de fin de PI
+* **Condition de déclenchement :** part des tickets `Done` mis à jour dans les derniers jours du PI (comparaison de préfixe de date), en %. Si aucun ticket `Done` n'existe, le pattern retourne `NORMAL` par défaut.
+* **Seuils :** `warn = 20 %` · `crit = 35 %` (valeurs inline dans la fonction, pas dans `THRESHOLDS`)
+* **Action associée :** « Agent Pulse quotidien — rappel automatique mise à jour tickets actifs > 48h sans update »
 
 ---
 
-#### 11 — Défaillance Qualité
+### P12 — Sous-estimation Chronique
 
-* **Type de problème :** Qualité
-* **Seuil de déclenchement :**
-
-```math
-\text{Temps de résolution des bugs} > 200\% \text{ de la Baseline}
-```
-
-* **Action rapide :** renforcer l'activité de QA, enrichir et améliorer la couverture de tests.
+* **Fonction :** `detect_P12_underestimate` — `engine/signals/pattern_detector.py:598`
+* **Donnée consommée :** `story_points` planifiés vs `story_points` des tickets `Done`
+* **Condition de déclenchement :** `(done_sp - planned_sp) / planned_sp × 100` — sévérité inversée (une valeur très négative est le signal du problème)
+* **Seuils :** `warn = -20 % delta` · `crit = -35 % delta`
+* **Action associée :** « Session d'estimation collective — revoir les référentiels SP par type de ticket »
 
 ---
 
-#### 12 — Goulot Livraison
+### P13 — Inactivité des Tickets (Stale Issues)
 
-* **Type de problème :** Flow / Delivery
-* **Seuil de déclenchement :**
-
-```math
-< 70\% \text{ des Features engagées effectivement livrées à mi-PI}
-```
-
-* **Action rapide :** rebalancer les ressources et expertises sur les goulets identifiés.
+* **Fonction :** `detect_P13_stale` — `engine/signals/pattern_detector.py:625`
+* **Donnée consommée :** nombre de jours dans le statut courant, filtré sur `status == "En réalisation"`
+* **Condition de déclenchement :** nombre de tickets actifs immobiles depuis plus de 14 jours (`CYCLE_TIME_AVG × 2`, avec `CYCLE_TIME_AVG = 7` codé en dur dans la fonction)
+* **Seuils :** `warn = 3 (compte)` · `crit = 7 (compte)`
+* **Action associée :** « Tickets In Progress > 14j — revue obligatoire en Daily Stand-up »
 
 ---
 
-#### 13 — Surcharge Composant
+### P14 — Absence de Hiérarchie SAFe
 
-* **Type de problème :** Architecture
-* **Seuil de déclenchement :** un composant unique absorbe plus de 60 % de la charge globale.
-* **Action rapide :** répartir la charge de développement, mettre en place des sessions de pairing.
-
----
-
-#### 14 — Instabilité Équipe
-
-* **Type de problème :** Performance
-* **Seuil de déclenchement :**
-
-```math
-\text{Variance de la vélocité} > 40\%
-```
-
-* **Action rapide :** stabiliser la composition de l'équipe, abaisser drastiquement les limites de WIP.
+* **Fonction :** `detect_P14_hierarchy` — `engine/signals/pattern_detector.py:657`
+* **Donnée consommée :** Stories sans `feature_link`, Features sans `pi` renseigné
+* **Condition de déclenchement :** part des tickets orphelins (Stories sans Feature + Features sans PI) sur le total, en %
+* **Seuils :** `warn = 10 %` · `crit = 20 %`
+* **Action associée :** « QualityGuard: dimension Traçabilité — toute Story sans Feature bloquée en DoR »
 
 ---
 
-#### 15 — Explosion Scope
+### P15 — Reopening Fréquent
 
-* **Type de problème :** Scope
-* **Seuil de déclenchement :** plus de 25 % de périmètre additionnel ajouté en cours de route.
-* **Action rapide :** geler immédiatement le scope, mener un arbitrage avec la ligne business.
-
----
-
-#### 16 — Gridlock Dépendances
-
-* **Type de problème :** Dépendances
-* **Seuil de déclenchement :** plus de 20 % des Features du train se retrouvent bloquées.
-* **Action rapide :** découper les éléments de livraison, mener une coordination proactive inter-équipes.
-
----
-
-#### 24 — Zombie Epics
-
-* **Type de problème :** Portfolio
-* **Explication simple :** des Epics restent bloquées à l'état « En cours » pendant des mois sans jamais livrer de MVP.
-* **Action rapide :** appliquer strictement les Lean Budget Guardrails ; forcer un pivot ou l'arrêt de l'Epic.
-
----
-
-#### 26 — Surcharge de la Solution
-
-* **Type de problème :** Large Solution
-* **Explication simple :** trop de grandes capacités (*Capabilities*) sont lancées simultanément entre plusieurs trains.
-* **Action rapide :** réduire et limiter strictement le WIP au niveau du Solution Kanban.
-
----
-
-### 🟢 Patterns à Criticité Moyenne (Priorité 3)
-
-#### 17 — Dérive Innovation
-
-* **Type de problème :** Innovation
-* **Seuil de déclenchement :**
-
-```math
-\text{Temps ou capacité allouée à l'innovation} < 10\%
-```
-
-* **Action rapide :** sanctuariser et dédier une capacité spécifique aux activités d'innovation.
-
----
-
-#### 18 — Explosion Lead Time
-
-* **Type de problème :** Delivery Feature
-* **Seuil de déclenchement :**
-
-```math
-\text{Lead Time global} > 2 \times \text{la Baseline}
-```
-
-* **Action rapide :** pratiquer le *thin slicing* (découpage fin des récits utilisateurs).
-
----
-
-#### 19 — Déséquilibre Portfolio
-
-* **Type de problème :** Portfolio
-* **Seuil de déclenchement :** plus de 50 % de l'effort global concentré sur un seul et unique thème.
-* **Action rapide :** rééquilibrer la roadmap et la répartition des investissements.
-
----
-
-#### 20 — Faible ROI Features
-
-* **Type de problème :** Business Value
-* **Seuil de déclenchement :**
-
-```math
-> 30\% \text{ de Features affichant un ROI} < 1{,}5
-```
-
-* **Action rapide :** réauditer et revoir en profondeur les business cases associés.
-
----
-
-#### 21 — Fragmentation Efforts
-
-* **Type de problème :** Flux / Focus
-* **Seuil de déclenchement :** plus de 10 Epics actives simultanément.
-* **Action rapide :** mettre en place un quota strict et limiter le WIP au niveau des Epics.
-
----
-
-#### 22 — Dérive Architecturale
-
-* **Type de problème :** Tech
-* **Seuil de déclenchement :** la part du travail absorbée par la dette technique dépasse 25 %.
-* **Action rapide :** déclencher une revue d'architecture globale.
-
----
-
-#### 23 — Inefficience Flow
-
-* **Type de problème :** Flow / Process
-* **Seuil de déclenchement :**
-
-```math
-\text{Flow Efficiency} < 30\%
-```
-
-* **Action rapide :** optimiser les étapes du processus de delivery, traquer et réduire le *waste*.
-
----
-
-#### 28 — Inertie du Feedback Loop
-
-* **Type de problème :** Gouvernance
-* **Explication simple :** les données et métriques du terrain mettent trop de temps à remonter pour permettre l'ajustement de la Roadmap.
-* **Action rapide :** augmenter immédiatement la fréquence des instances de Portfolio Sync.
+* **Fonction :** `detect_P15_reopening` — `engine/signals/pattern_detector.py:691`
+* **Donnée consommée :** champ optionnel `reopened` (booléen) sur chaque ticket
+* **Condition de déclenchement :** part des tickets marqués `reopened = true` sur le total, en %
+* **Seuils :** `warn = 5 %` · `crit = 10 %`
+* **Action associée :** « Revoir la Definition of Done — ajouter critères de test automatisés obligatoires »
 
 ---
 
 ## 🛠️ Traçabilité des Rapprochements Techniques
 
-Pour garantir l'exactitude mathématique, les moteurs du Registre R1 croisent les données brutes extraites de vos plateformes. Voici les règles de ciblage utilisées par l'infrastructure :
-
-### Extraction depuis l'API Jira
-
-* **Calcul du WIP (Work In Progress) :** décompté via le dénombrement des IDs de tickets positionnés dans les colonnes mappées avec la catégorie de statut *In Progress*.
-* **Indice WSJF (Weighted Shortest Job First) :** agrégation déterministe des champs personnalisés selon la formule suivante :
-
-```math
-\text{WSJF} = \frac{\text{User Business Value} + \text{Time Criticality} + \text{Risk Reduction / Opportunity Enablement}}{\text{Job Size}}
-```
-
-### Extraction depuis l'API GitHub Enterprise
-
-* **P90 Cycle Time :** mesure automatique du delta temporel situé entre la date de première validation (`commit`) et la date de fusion finale (`pull_request.merged_at`), filtrée sur le 90ème percentile des livraisons.
-* **Ratio de Dette Technique :** extrait par couplage avec les métriques de complexité cognitive et de couverture de code transmises par vos outils d'analyse statique branchés sur les workflows CI/CD.
+**Calcul du WIP (Work In Progress)** : `WorkloadOptimizer.get_team_wip` (`agents/advisors/workload_optimizer.py:72-90`) compte les tickets Jira au statut `"In Progress"` ou `"In Review"` dans le sprint ouvert, via une requête JQL directe (`search_issues`) — pas un mapping de colonnes Kanban généralisé. La charge cognitive est `(wip / wip_limit) × 100`, plafonnée à 100.
 
 ---
 
 ## 🔄 Évolution et Maintenance des Seuils
 
-Ces indicateurs et seuils de blocage sont dynamiques. Ils sont réévalués en fin de chaque PI (Program Increment) lors de l'événement **Inspect & Adapt** par le moteur `TemporalEngine`.
+Les 30 seuils (`warn`/`crit` × 15 patterns) sont des **constantes statiques** du module `pattern_detector.py` (`THRESHOLDS`, lignes 78-94, plus deux jeux de valeurs inline pour P06 et P11). `engine/core/temporal_engine.py` calcule des tendances de vélocité mais **ne réévalue aucun seuil** (grep sur `THRESHOLDS`/`threshold` dans ce fichier = 0 occurrence) — il n'existe pas de mécanisme d'ajustement automatique en fin de PI. Toute modification de seuil passe aujourd'hui par une édition directe du code ; leur migration vers un mécanisme configurable (distillats) est un arbitrage en attente (`DRIFT-005`).
 
-> Toute modification d'une formule de calcul ou d'un seuil critique doit faire l'objet d'un amendement répertorié dans le registre de gouvernance éthique de l'architecture.
+> Toute modification d'une formule de calcul ou d'un seuil critique doit faire l'objet d'un amendement répertorié dans le [registre de gouvernance éthique](../04-gouvernance-ethique/decisions-index.md).
+
+---
+
+## 📋 Feuille de route — Ambitions non implémentées
+
+Les éléments suivants apparaissaient dans une version précédente de ce document comme s'ils étaient calculés par le code. Aucun n'a de fonction, seuil ou source de données correspondante dans `pattern_detector.py` ni ailleurs dans `src/neuro_scale/` (vérifié par grep). Ils sont conservés ici comme intentions, sans formule ni seuil chiffré — statut 📋 Tracée.
+
+**Patterns supplémentaires envisagés** (noms uniquement, aucun mécanisme de détection existant) :
+
+* Effondrement Vélocité
+* Sous-livraison Chronique
+* Saturation WIP Critique
+* Pic Injection Défauts
+* Blocage Delivery Pipeline
+* Spirale Qualité
+* Déraillement Feature
+* Paralysie Décisionnelle
+* Érosion Prédictibilité
+* Explosion Dette Tech
+* Défaillance Qualité
+* Goulot Livraison
+* Surcharge Composant
+* Instabilité Équipe
+* Explosion Scope
+* Gridlock Dépendances
+* Dérive Innovation
+* Explosion Lead Time
+* Déséquilibre Portfolio
+* Faible ROI Features
+* Fragmentation Efforts
+* Dérive Architecturale
+* Inefficience Flow
+* Zombie Epics
+* Désalignement Stratégique
+* Surcharge de la Solution
+* Budgétisation Rigide
+* Inertie du Feedback Loop
+
+**Sources de données envisagées, non connectées** :
+
+* **API GitHub Enterprise** — `pull_request.merged_at` pour un P90 Cycle Time, couplage CI/CD pour un ratio de dette technique. `0 occurrence` de `github`/`pull_request`/`merged_at` dans `src/neuro_scale/` ; les adapters réels sont `atlassian`, `llm`, `transcription`, `vector`.
+* **Indice WSJF (Weighted Shortest Job First)** — agrégation de champs personnalisés Jira (`User Business Value`, `Time Criticality`, `Risk Reduction/Opportunity Enablement`, `Job Size`). Aucun calcul WSJF trouvé dans le code.

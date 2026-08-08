@@ -13,7 +13,7 @@ Dans le paradigme NeuroScaling, le Product Owner (PO) s'extrait du rôle de simp
 
 ### Le Filtre Anti-Bruit Équipes
 Le système analyse de manière algorithmique chaque élément du backlog selon les critères INVEST (*Independent, Negotiable, Valuable, Estimable, Small, Testable*). Toute User Story qui ne dispose pas de critères d'acceptation formalisés ou d'une estimation chiffrée est immédiatement catégorisée comme **Bruit**.
-Les éléments identifiés comme du bruit sont isolés. Le système refuse d'injecter ces données corrompues dans le `PredictiveEngine`, évitant ainsi de fausser les modélisations de trajectoire ou les calculs de vélocité du train.
+Les éléments identifiés comme du bruit sont isolés. Le système refuse d'injecter ces données corrompues dans le `PredictiveEngineAgent`, évitant ainsi de fausser les modélisations de trajectoire ou les calculs de vélocité du train.
 
 ### Les Certificats de Confiance du Backlog
 Pour chaque tableau de bord et vue de planification, le PO s'appuie sur des indicateurs de certitude certifiés par le Registre R1. Ces badges éliminent les arbitrages fondés sur des approximations :
@@ -24,17 +24,15 @@ Pour chaque tableau de bord et vue de planification, le PO s'appuie sur des indi
 
 ---
 
-## 2. L'Arbitrage de Valeur et le WSJF Dynamique (Registre R2)
+## 2. L'Arbitrage de Valeur (Registre R2)
 
-Face à la pression des parties prenantes métiers, le PO s'appuie sur l'agent `ValueArbitrator` situé dans le Registre R2 pour défendre l'ordre de priorité du Backlog sur la base de faits et d'alignements quantifiables.
+Face à la pression des parties prenantes métiers, le PO s'appuie sur l'agent `ValueArbitratorAgent` situé dans le Registre R2 pour défendre l'ordre de priorité du Backlog sur la base de faits et d'alignements quantifiables.
 
-### Modélisation du WSJF Dynamique
-Le calcul du *Weighted Shortest Job First* (WSJF) cesse d'être un exercice statique mené une fois par trimestre lors du PI Planning. Le moteur calcule en temps réel la perte d'opportunité financière et l'impact de la stagnation. Si une Feature critique reste bloquée dans le backlog alors que ses technologies sous-jacentes dérivent ou que le marché évolue, son coût du retard (*Cost of Delay*) est réévalué automatiquement. 
-
-L'agent `ValueArbitrator` compare ces variations de manière transversale et soumet des permutations de priorités dès qu'une Feature à faible valeur consomme de la capacité au détriment d'un élément urgent.
+### *Correction : pas de "WSJF Dynamique recalculé en temps réel"*
+Une version précédente de cette section décrivait un calcul WSJF (*Weighted Shortest Job First*) recalculé en continu. **Aucun calcul WSJF complet n'a été trouvé dans le dépôt** (cf. `02-moteur-architecture/indicateurs-calculs.md`) : seul `OKREngine` calcule un sous-facteur (Business Value, échelle SAFe 1-20), et `ValueArbitratorAgent` consomme un `feature_wsjf` déjà présent dans l'état — il ne le calcule pas. Le mécanisme réel : le graphe déclenche `ValueArbitratorAgent` (nœud `value_arbitrator`) quand `cli_score > cli_budget` **et** `feature_wsjf > 20` (`state_monitor/graph.py:383`), et l'agent (un LLM) évalue alors l'alignement stratégique à partir de cet état.
 
 ### Traque des Dérives Stratégiques
-L'agent `ValueArbitrator` cartographie en permanence l'adéquation sémantique et opérationnelle entre l'effort réel fourni par les équipes de développement dans les Sprints (données Jira) et les objectifs macro (OKRs) fixés par l'entreprise.
+L'agent `ValueArbitratorAgent` cartographie en permanence l'adéquation sémantique et opérationnelle entre l'effort réel fourni par les équipes de développement dans les Sprints (données Jira) et les objectifs macro (OKRs) fixés par l'entreprise.
 
 Si une équipe consacre 60% de sa bande passante à de la maintenance technique ou à des demandes hors-périmètre alors que l'objectif prioritaire du PI est l' "Expansion Cloud", le système lève immédiatement une alerte de dérive de valeur. Le PO dispose alors des leviers factuels pour renégocier le périmètre et refuser les sollicitations parasites.
 
@@ -72,17 +70,17 @@ Pour restaurer la visibilité et lever le blocage, le PO doit mener un atelier d
 
 ## 5. Protocole de Décision RPD (ADR-006)
 
-Toutes les alertes acheminées au Product Owner adoptent la structure *Naturalistic Decision Making* (NDM) définie par l'**ADR-006**, garantissant l'application de la règle d'or : *L'IA suggère, l'algorithme prouve, l'humain décide.*
+Toutes les alertes acheminées au Product Owner adoptent le format **RPD (Recommandation / Preuve / Diagnostic)** défini par l'**ADR-006** — *correction : ADR-006 définit ce format à 3 champs, pas la structure *Naturalistic Decision Making* (NDM) de Gary Klein, qui reste une inspiration conceptuelle distincte, correctement citée par ailleurs dans `01-fondements-framework/theories-base.md`* — garantissant l'application de la règle d'or : *L'IA suggère, l'algorithme prouve, l'humain décide.*
 
 ### Cas Pratique A : Alerte de Complexité d'Architecture
 * **R (Recommandation)** : Diviser la Feature `[ID_094]` en deux lots distincts et reporter le second lot au PI suivant.
 * **P (Preuve R1)** : Le Quality Guard indique que cette Feature comprend 45 User Stories interdépendantes, dépassant de 50% la limite de complexité structurelle tolérée pour un seul bloc d'exécution.
-* **D (Diagnostic R2)** : L'obsolescence et le `PredictiveEngine` estiment la probabilité de complétion de la Feature à seulement 30% si elle est maintenue en l'état pour le PI à venir.
+* **D (Diagnostic R2)** : L'obsolescence et le `PredictiveEngineAgent` estiment la probabilité de complétion de la Feature à seulement 30% si elle est maintenue en l'état pour le PI à venir.
 
 ### Cas Pratique B : Alerte de Perte d'Opportunité Financière
 * **R (Recommandation)** : Geler le développement de la Feature "Analytics V2" `[ID_112]` et basculer l'effort du Sprint sur la Feature "Sécurité API" `[ID_087]`.
 * **P (Preuve R1)** : La Feature "Sécurité API" constitue un prérequis bloquant pour trois autres trains de l'organisation. Son retard mathématique s'élève actuellement à 2 Sprints.
-* **D (Diagnostic R2)** : L'agent `ValueArbitrator` identifie un risque de pénalité contractuelle de niveau critique. La valeur de la Feature "Analytics V2" est qualifiée de "différée" par rapport au risque de non-conformité financière immédiat.
+* **D (Diagnostic R2)** : L'agent `ValueArbitratorAgent` identifie un risque de pénalité contractuelle de niveau critique. La valeur de la Feature "Analytics V2" est qualifiée de "différée" par rapport au risque de non-conformité financière immédiat.
 
 ---
 
@@ -97,4 +95,4 @@ Le tableau ci-dessous synthétise les postures de communication à adopter lors 
 | :--- | :--- | :--- |
 | "Cette fonctionnalité de dernière minute est ultra-prioritaire, il faut l'intégrer tout de suite dans le Sprint." | "L'injection de cette demande élève le WIP à 85%. Le `CapacityAgent` indique que cela va provoquer une saturation cognitive immédiate et réduire de 40% la probabilité de succès de nos OKRs majeurs. Validons-nous formellement ce risque de rupture ?" | Loi de Sweller & `CapacityAgent` (Registre R2) |
 | "Vos estimations ne sont pas fiables, cette Feature ne prendra que deux jours à développer." | "Le moteur Quality Guard a classé cette Feature en statut **NON VÉRIFIÉ** en raison de l'absence de critères de test et de dépendances cycliques avec l'équipe Sigma. Le système n'ouvrira pas la capacité tant que la donnée d'entrée n'est pas assainie." | Pare-feu INVEST `quality_guard.py` (Registre R1) |
-| "Pourquoi mon sujet n'avance pas ? Vous privilégiez toujours les mêmes équipes." | "Le WSJF Dynamique recalculé en temps réel montre que la stagnation de votre Feature génère une perte d'opportunité inférieure au goulot d'étranglement de l'API de Sécurité, qui bloque actuellement 40% de la valeur globale du train." | Calcul de Perte d'Opportunité du `ValueArbitrator` (Registre R2) |
+| "Pourquoi mon sujet n'avance pas ? Vous privilégiez toujours les mêmes équipes." | "Le `ValueArbitratorAgent` signale que votre Feature entre en conflit CLI/OKR avec l'API de Sécurité, qui bloque actuellement une part significative de la valeur du train — *correction : pas de 'WSJF Dynamique recalculé en temps réel', ni de chiffre de blocage mesuré*." | Arbitrage CLI/OKR du `ValueArbitratorAgent` (Registre R2) |

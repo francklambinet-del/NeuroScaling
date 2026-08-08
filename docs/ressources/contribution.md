@@ -23,7 +23,7 @@ Pour soumettre une contribution, votre proposition doit suivre un parcours d'év
   Identifiez le pilier organisationnel concerné (SAFe 6.0, Team Topologies, Théorie des Contraintes, VSM) et formulez la modification sous forme d'une règle logique explicite (ex : conditions `IF / THEN`).
 * **Étape 2 : Niveau de Preuve Scientifique**  
   Adossez votre proposition à un niveau de certitude méthodologique :
-  * **Niveau Vert (Irréfutable) :** Basé sur des lois mathématiques ou des sciences cognitives établies (ex : Théorie de la Charge Cognitive de Sweller, Loi d'Ashby).
+  * **Niveau Vert (ÉTABLI) :** Basé sur des lois mathématiques ou des sciences cognitives établies (ex : Théorie de la Charge Cognitive de Sweller, Loi d'Ashby) — *correction de vocabulaire : le code n'admet que CALCULÉ/PROBABLE/NON VÉRIFIÉ, jamais "Irréfutable"*.
   * **Niveau Jaune (Robuste) :** Basé sur des frameworks industriels éprouvés et documentés (ex : Team Topologies, patterns SAFe).
 * **Étape 3 : Soumission du Distillat**  
   Proposez la structure de données mise à jour ou le nouvel identifiant de règle (`rule_id`) pour intégration dans la matrice d'injection.

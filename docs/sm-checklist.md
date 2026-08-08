@@ -17,14 +17,13 @@ L'objectif est d'identifier les dérives du flux de production (goulots d'étran
 Le SM s'appuie sur trois indicateurs clés pour mesurer la friction opérationnelle de l'équipe.
 
 ### A. Le Taux de Saturation de l'Encours (WIP Saturation)
- Le framework définit une limite d'encours (Work In Progress) par développeur, basée sur une calibration empirique initiale ajustable selon le contexte du train:
+*Correction* : la formule `Stories actives / (Développeurs × 1.5)` n'a aucun référent en code. Le mécanisme réel (`WorkloadOptimizer`, `agents/advisors/workload_optimizer.py`) compare le nombre de tickets actifs (`In Progress`, `In Review`) à une limite d'équipe — `WIP_LIMIT_DEFAULT = 8` par défaut, ou `team.effective_wip_limit()` si l'équipe est enregistrée dans le `TeamContext`. Il n'y a pas de facteur multiplicatif par nombre de développeurs.
 
-$$
-\text{WIP Saturation} = \frac{\text{Nombre de Stories actives (In Progress + In Review)}}{\text{Nombre de Développeurs} \times 1.5} \times 100
-$$
+```
+charge_cognitive (%) = (wip_actuel / wip_limit) × 100
+```
 
-
-> 🚨 **Seuil d'Alerte :** Si le taux dépasse 75%, le flux est considéré comme saturé. Le SM doit interdire l'ouverture de toute nouvelle Story lors du Daily et forcer la résolution des tâches en cours ("Stop starting, start finishing").
+> 🚨 **Seuil d'Alerte :** Si le taux dépasse 75%, le flux est considéré comme saturé (`COGNITIVE_LOAD_THRESHOLD`, cohérent avec le seuil `CapacityAgent` documenté ailleurs dans le corpus). Le SM doit interdire l'ouverture de toute nouvelle Story lors du Daily et forcer la résolution des tâches en cours ("Stop starting, start finishing").
 
 ### B. L'Index de Stagnation (Stories Zombies)
 Une User Story (US) est classée comme **Zombie** si elle n'a subi aucune transition de statut ou mise à jour de ticket depuis plus de 48 heures.
@@ -56,11 +55,11 @@ Le SM exécute le script d'inspection visuelle et analytique suivant sur le tabl
 
 ---
 
-## 💻 3. Logique Algorithmique du Script d'Alerte `sm_health_check.py`
+## 💻 3. Logique Algorithmique Illustrative
 
-L'automatisation de ce diagnostic matinal repose sur un composant d'analyse du tableau, généralement déclenché par la CI/CD pour préparer le rapport du Scrum Master. La logique métier se structure autour des axes suivants :
+*Correction* : `sm_health_check.py` ne désigne aucun fichier du dépôt — 0 occurrence. Ce qui suit est une **description illustrative** d'une routine de diagnostic matinal, pas un composant existant ni un déclenchement CI/CD réel. La logique métier réelle la plus proche est celle de `WorkloadOptimizer` (§1.A) :
 
-* **Initialisation des Contraintes** : Le système se base sur le nombre de développeurs actifs pour instancier la limite maximale théorique du WIP (calculée via le facteur de tolérance de 1.5).
+* **Initialisation des Contraintes** : *illustratif* — le mécanisme réel initialise la limite de WIP à une constante par défaut (8) ou à la limite effective de l'équipe si elle est enregistrée, pas via un facteur multiplicatif par nombre de développeurs.
 * **Analyse d'État et Itération** : Le script parcourt l'intégralité des tickets du sprint pour trier les statuts actifs (`In Progress`, `In Review`, `Ready for QA`), isoler la phase spécifique de QA par rapport au développement pur, et mesurer l'écart temporel avec la dernière mise à jour.
 * **Génération Automatique des Alertes** : 
     * Si le seuil de saturation du WIP dépasse 75%, une alerte critique est levée pour bloquer l'ouverture de nouvelles tâches.
@@ -75,4 +74,4 @@ En s'appuyant sur les résultats du diagnostic, le SM oriente le Daily selon l'o
 
 * **Traitement des Zombies (2 min)** : « L'US-422 n'a pas bougé depuis 3 jours. Quel est le point de blocage ? Qui vient en renfort pour la terminer ? »
 * **Résolution du Goulot QA (3 min)** : « Notre ratio QA est critique. Avant de coder les tâches du jour, qui prend en charge la relecture de la PR de l'US-425 ? »
-* **Alignement du Reste à Faire (10 min max)** : Revue des tâches nominales. Rappel strict de la règle : interdiction formelle de déplacer un ticket de "To Do" à "In Progress" tant que la saturation générale n'est pas redescendue sous la barre des 60%.
+* **Alignement du Reste à Faire (10 min max)** : Revue des tâches nominales. Rappel strict de la règle : interdiction formelle de déplacer un ticket de "To Do" à "In Progress" tant que la saturation générale n'est pas redescendue dans la Zone Cible de Flow (40-65%, cf. `CapacityAgent`) — *correction : aucun seuil de reprise à 60% n'existe en code, les constantes réelles sont 40/65/75*.

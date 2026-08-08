@@ -31,8 +31,8 @@ Le SM n'attend plus la réunion du Daily Stand-up pour identifier et traiter les
 
 Le framework NeuroScaling agit comme un miroir objectif sur les pratiques réelles et quotidiennes de l'équipe.  
 
-* **Stabilité de la Vélocité** : Analyser les projections du `PredictiveEngine` sur la capacité réelle de l'équipe par rapport à ses engagements initiaux (*Commitment*).  
-* **Qualité du Sprint** : Suivre les indicateurs clés tels que la "Densité de Défauts" (définie selon l'**ADR-032**) et le "Taux de Débordement" via le `FlowMetricsEngine`.  
+* **Stabilité de la Vélocité** : Analyser les projections du `PredictiveEngineAgent` (*correction de nom*) sur la capacité réelle de l'équipe par rapport à ses engagements initiaux (*Commitment*).  
+* **Qualité du Sprint** : Suivre les 5 métriques DORA + 1 corrélation CLI réellement calculées par `FlowMetricsEngine` (vélocité, temps de flux, efficacité, charge, distribution — cf. `02-moteur-architecture/indicateurs-calculs.md`) — *correction : la "Densité de Défauts" n'existe dans aucun de ces calculs ; elle figure en feuille de route (ADR-034, "à rédiger"), pas comme métrique livrée. L'ADR-032 est le gate DQS, sans rapport avec cette métrique.*
 * **L'Anti-Pattern "Shadow Work"** : Identifier les baisses de flux inexpliquées qui cachent du travail non documenté ou des requêtes de couloir grâce aux audits automatisés du `Quality Guard`.  
 
 ---

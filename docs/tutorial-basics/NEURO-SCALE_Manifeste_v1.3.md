@@ -146,6 +146,8 @@ Les frameworks agiles classiques structurent le travail en cérémonies.
 NEURO-SCALE le structure en **5 boucles de régulation** :
 Perception → Coordination → Décision → Apprentissage → Adaptation.
 
+*Précision (2026-08-02)* : cette séquence narrative en 5 boucles est distincte des « 5 mouvements » du Loop Engineering décrits dans `01-fondements-framework/Influences-Ingenieries.md` (Discovery → Handoff → Verification → Persistence → Scheduling) — deux découpages différents du même sujet, la coïncidence du chiffre 5 ne signale pas une équivalence entre les deux.
+
 Chaque boucle a une intention unique.
 Chaque boucle est nourrie par les agents, animée par les humains.
 

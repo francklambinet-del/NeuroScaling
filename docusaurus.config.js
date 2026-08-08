@@ -55,6 +55,19 @@ const config = {
         },
       },
     ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // /nxe-pi-readiness décrivait un runtime "NXE" fictif (0 occurrence en code) —
+        // retitré /rte-pi-readiness sur son contenu réel (bon de travaux 04, Lot 1 fichier 4/8).
+        redirects: [
+          {
+            from: '/nxe-pi-readiness',
+            to: '/rte-pi-readiness',
+          },
+        ],
+      },
+    ],
   ],
 
   stylesheets: [
