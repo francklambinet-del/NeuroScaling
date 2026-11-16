@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkneuroscaling_site=globalThis.webpackChunkneuroscaling_site||[]).push([[1903],{1912(s){s.exports=JSON.parse('{"blogBasePath":"/NeuroScaling/blog","blogTitle":"Blog","authorsListPath":"/NeuroScaling/blog/authors"}')}}]);
